@@ -139,10 +139,19 @@ app.get('/add-website/:websiteName', (req, res) => {
   }
 });
 
-app.use(express.static('client/dist'));
-const path = require('path');
+// app.use(express.static('client/dist'));
+// const path = require('path');
+// app.get('*', (req, res) => {
+// res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+// });
+
+
+// Serve static files from the 'dist' directory inside the client folder
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+// Route for serving the 'index.html' file
 app.get('*', (req, res) => {
-res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
  
