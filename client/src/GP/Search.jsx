@@ -6,7 +6,7 @@ function Search({ setSearchResults }) {
 
   const handleSearch = () => {
     axios
-      .get('http://localhost:3000/content/search/' + searchEmail)
+      .get('/content/search/' + searchEmail)
       .then((result) => {
         setSearchResults(result.data);
       })

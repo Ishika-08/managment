@@ -47,7 +47,7 @@ function Home() {
         }
       
         axios
-          .delete('http://localhost:3000/content/delete/' + table, { data: { ids: selectedIds } })
+          .delete('/content/delete/' + table, { data: { ids: selectedIds } })
           .then((response) => {
             console.log(response.data); 
             setContent((prevContent) =>

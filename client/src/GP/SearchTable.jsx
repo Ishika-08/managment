@@ -19,7 +19,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 
   useEffect(() => {
     if (domain) {
-      axios.get("http://localhost:3000/website/" + domain)
+      axios.get("/website/" + domain)
         .then(result => {
           setWebsitesFound(result.data.websitesFound)})
         .catch(err => console.log(err));
@@ -27,7 +27,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
   }, [domain]); 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/websites/")
+    axios.get("/websites/")
     .then(result => setWebsite(result.data.websiteNames))
     .catch(err => console.log(err));
   }, []); 

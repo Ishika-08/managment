@@ -14,7 +14,7 @@ const AddWebsite = () => {
     
     try {
       // Make a GET request to the server to add a new website
-      await axios.get(`http://localhost:3000/add-website/${websiteUrl}/`);
+      await axios.get(`/add-website/${websiteUrl}/`);
       
       // Handle success or any other necessary actions
       console.log(`Successfully added website: ${websiteUrl}`);
