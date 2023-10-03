@@ -25,7 +25,7 @@ function Update() {
 
 
   useEffect(()=>{
-    axios.get('http://localhost:3000/content/update/' + id)
+    axios.get('/content/update/' + id)
     .then(result => {
         console.log(result.data)
       setFormData(result.data)

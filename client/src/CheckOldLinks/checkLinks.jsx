@@ -5,7 +5,7 @@ const Table = () => {
   const [updatedData, setUpdatedData] = useState([]);
 
   useEffect(()=>{
-    axios.get("http://localhost:3000/check-links/get-links/")
+    axios.get("/check-links/get-links/")
   .then(result => setUpdatedData(result.data))
   .catch(err => console.log(err))
   },[])

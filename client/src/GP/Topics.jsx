@@ -8,7 +8,7 @@ const Topics = ({site}) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/website/findWebsite/" + site)
+      .get("/website/findWebsite/" + site)
       .then((result) => {
         setContent(result.data);
       })

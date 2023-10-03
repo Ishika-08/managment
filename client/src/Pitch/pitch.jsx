@@ -12,7 +12,7 @@ const AddData = () => {
 
     console.log("Selected site:", site);
     axios
-      .get("http://localhost:3000/track/copyEmails/" + site)
+      .get("/track/copyEmails/" + site)
       .then((result) => {
         setEmails(result.data.eArray);
         setShowEmails(true); // Show the email div when emails are available
