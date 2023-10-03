@@ -142,7 +142,7 @@ app.get('/add-website/:websiteName', (req, res) => {
 
 app.use(express.static('client/dist'));
 app.get('*', (req, res) => {
-res.sendFile(path.resolve(__dirname, "client", "dist"));
+res.sendFile(path.resolve(__dirname + "/client/dist"));
 });
 
 
