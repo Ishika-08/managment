@@ -140,7 +140,7 @@ app.get('/add-website/:websiteName', (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname + "/public")));
+app.use(express.static(path.join(__dirname + "/client/dist")));
 
 
 
