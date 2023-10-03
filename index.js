@@ -146,7 +146,7 @@ app.get('/add-website/:websiteName', (req, res) => {
 // res.sendFile(path.resolve(__dirname + "public"));
 // });
 
-app.use(express.static(path.join(__dirname + "public")))
+app.use(express.static(path.join(__dirname + "/public")))
 
 
  
