@@ -7,8 +7,8 @@ const AddData = ()=>{
     const [models, setModels] = useState([])
 
     useEffect(() => {
-        axios.get("/models/")
-        .then(result => {setModels(result.data.modelNames)
+        axios.get("/websites/")
+        .then(result => {setModels(result.data.websiteNames)
         console.log(result.data)})
         .catch(err => console.log(err));
       }
@@ -36,7 +36,6 @@ const AddData = ()=>{
             aria-hidden="true"
             onChange={(e) => setTable(e.target.value)}>
                 <option>---------</option>
-                <option value="H4">4H</option>
                 {models.map(element => {
                     return <option>{element}</option>
                 })}

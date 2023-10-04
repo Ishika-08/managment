@@ -36,7 +36,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 //used for suggest site button get domain
   const handleSite = (Email, id) => {
     setUpdateSiteId(id);
-    axios.get("http://localhost:3000/database/" + Email)
+    axios.get("/database/" + Email)
       .then(result => {
         const websiteUrl = result.data[0].Website;
         const url = new URL(websiteUrl);
@@ -49,7 +49,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
   
 //used for updating site name in contents table and rerendering table
     const handleSelect = (websiteName) =>{
-      axios.put('http://localhost:3000/content/update/' + updateSiteId, {...content, Site: websiteName})
+      axios.put('/content/update/' + updateSiteId, {...content, Site: websiteName})
    .then(result =>{
     console.log(result)
     const updatedObjectIndex = content.findIndex(obj => obj._id === result.data._id);
@@ -67,89 +67,91 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
   return (
     <>
 {/* Search result table */}
-    <section className="intro m-2">
-      <div className="gradient-custom-2 h-100">
-        <div className="mask d-flex align-items-center h-100">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-12">
-                <div className="table-responsive">
-                  <table className="table table-light table-bordered mb-0">
-                    <thead>
-                      <tr>
-                        <th scope="col">Select</th>
-                        <th scope="col">Mailbox</th>
-                        <th scope="col">Docs URL</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Email Id</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Site</th>
-                        <th scope="col">Requirements</th>
-                        <th scope="col">DF</th>
-                        <th scope="col">Action</th> {/* New column */}
+<section className="intro m-2">
+  <div className="gradient-custom-2 h-100">
+    <div className="mask d-flex align-items-center h-100">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-12">
+            <div className="table-responsive">
+              <table className="table table-light table-bordered mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col" className="col-1">Select</th>
+                    <th scope="col" className="col-1">Mailbox</th>
+                    <th scope="col" className="col-1">Docs URL</th>
+                    <th scope="col" className="col-2">Title</th>
+                    <th scope="col" className="col-2">Email Id</th>
+                    <th scope="col" className="col-1">Status</th>
+                    <th scope="col" className="col-1">Site</th>
+                    <th scope="col" className="col-2">Requirements</th>
+                    <th scope="col" className="col-1">DF</th>
+                    <th scope="col" className="col-1">Action</th> {/* New column */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchContent.map((content, index) => {
+                    const rowNumber = index + 1;
+                    return (
+                      <tr key={content._id} scope="row">
+                        <td style={{ maxWidth: '100px' }}>
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              onChange={(event) => {
+                                handleCheckboxChange(event, content._id, content.Status, content.Site);
+                              }}
+                            />
+                            <label className="custom-control-label" htmlFor="customCheck1">
+                              {" "}
+                              {rowNumber}
+                            </label>
+                          </div>
+                        </td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Mailboxes}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.DocsURL}</td>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Title}</td>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Email}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Status}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Site}</td>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Requirements}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.DF}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
+                          {content.Status === ("sent" || "Sent") && (
+                            <Link
+                              to={`/GP/publish/${content.Site}/${content._id}/`}
+                              className="btn btn-success"
+                              onClick={() => {
+                                // Handle publish action here
+                              }}
+                            >
+                              Publish
+                            </Link>
+                          )}
+                          {(content.Site === undefined || content.Site === "") && (
+                            <Link
+                              className="btn btn-success"
+                              onClick={()=> handleSite(content.Email, content._id)}
+                            >
+                              Suggest Site
+                            </Link>
+                          )}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {searchContent.map((content, index) => {
-                        const rowNumber = index + 1;
-                        return (
-                          <tr key={content._id} scope="row">
-                            <td>
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  onChange={(event) => {
-                                    handleCheckboxChange(event, content._id, content.Status, content.Site);
-                                  }}
-                                />
-                                <label className="custom-control-label" htmlFor="customCheck1">
-                                  {" "}
-                                  {rowNumber}
-                                </label>
-                              </div>
-                            </td>
-                            <td>{content.Mailboxes}</td>
-                            <td>{content.DocsURL}</td>
-                            <td>{content.Title}</td>
-                            <td>{content.Email}</td>
-                            <td>{content.Status}</td>
-                            <td>{content.Site}</td>
-                            <td>{content.Requirements}</td>
-                            <td>{content.DF}</td>
-                            <td>
-                              {content.Status === ("sent" || "Sent") && (
-                                <Link
-                                  to={`/GP/publish/${content.Site}/${content._id}/`}
-                                  className="btn btn-success"
-                                  onClick={() => {
-                                    // Handle publish action here
-                                  }}
-                                >
-                                  Publish
-                                </Link>
-                              )}
-                              {(content.Site === undefined || content.Site === "") && (
-                                <Link
-                                  className="btn btn-success"
-                                  onClick={()=> handleSite(content.Email, content._id)}
-                                >
-                                  Suggest Site
-                                </Link>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
+
 
 
 {/* website table list */}
