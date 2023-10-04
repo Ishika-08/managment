@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Topics = ({site}) => {
+const Topics = ({site, id}) => {
   const [content, setContent] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [copiedTitles, setCopiedTitles] = useState(""); 
@@ -43,7 +43,7 @@ const Topics = ({site}) => {
     const table = "ExtraContents"
   
     axios.put('/content/update/' + id, {DocsURL: row.DocsURL, Title: row.Title, Status:row.Status})
-    .then(navigate('/GP'))
+    .then(result => console.log(result))
     .catch(err => console.log(err))
 
     axios

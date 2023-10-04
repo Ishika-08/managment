@@ -207,7 +207,7 @@ function Home() {
 
                   {showTopics && (selectedIds.length) === 1 && (
                       <div className="container">
-                          <Topic site={site}/>
+                          <Topic site={site} id={selectedIds[0]}/>
                       </div>
                   )}  
         </>
