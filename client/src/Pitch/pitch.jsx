@@ -1,21 +1,28 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddData = () => {
   const [site, setSite] = useState("");
   const [emails, setEmails] = useState([]);
-  const [showEmails, setShowEmails] = useState(false); // Control visibility of email div
-  console.log(site);
+  const [showEmails, setShowEmails] = useState(false); 
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const navigate = useNavigate()
+
+
+  const navigateToHome = () => {
+    navigate("/")
+  };
 
   const handleChange = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
+    e.preventDefault();
     console.log("Selected site:", site);
     axios
       .get("/track/copyEmails/" + site)
       .then((result) => {
         setEmails(result.data.eArray);
-        setShowEmails(true); // Show the email div when emails are available
+        setShowEmails(true); 
       })
       .catch((err) => console.log(err));
   };
@@ -24,13 +31,15 @@ const AddData = () => {
     const allEmails = emails.join("\n");
     navigator.clipboard.writeText(allEmails).then(
       () => {
-        console.log("copied");
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000); 
       },
       (err) => {
         console.error("Copy failed: ", err);
       }
     );
   };
+
 
 
   const mailboxOptions = [
@@ -48,7 +57,10 @@ const AddData = () => {
   ];
 
   return (
-    <div className="vh-100">
+      <div className="vh-100">
+        <button className="btn m-3" onClick={navigateToHome}>
+              <i className="fas fa-arrow-left"></i> Back to Home
+            </button>
       <div className="container m-5">
         <div className="row justify-content-center">
           <div className="col-md-6 card p-5">
@@ -82,6 +94,7 @@ const AddData = () => {
             <button className="btn btn-primary mx-2" onClick={handleCopy}>
               Copy Selected Titles
             </button>
+            {copySuccess && <div className="text-success h3">Emails copied successfully!</div>}
           </div>
           <div className="list-group">
             {emails.map((email, index) => (

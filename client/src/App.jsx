@@ -11,6 +11,8 @@ import Publish from "./GP/Publish"
 import CheckLinks from "./CheckOldLinks/checkLinks"
 import AddWebsite from './GP/AddWebsite'
 import "bootstrap/dist/css/bootstrap.min.css"
+import "@fortawesome/fontawesome-free/css/all.css";
+
 
 function App() {
 

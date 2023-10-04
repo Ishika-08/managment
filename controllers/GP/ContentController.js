@@ -34,6 +34,37 @@ exports.getDataByEmail = (req,res) => {
    .catch(err => res.json(err))
 }
 
+//get all data
+exports.getAll = (req, res) => {
+  models.Contents.find({})
+    .then(result => res.json(result))
+    .catch(err => res.json(err));
+};
+
+//get data by status
+exports.getDataByStatus = (req, res) => {
+  const status = req.params.searchStatus;
+
+  // Use a case-insensitive regular expression query to match any letter case
+  models.Contents.find({ Status: { $regex: new RegExp(status, 'i') } })
+    .then((content) => {
+      console.log(content);
+      res.json(content);
+    })
+    .catch((err) => res.json(err));
+};
+
+
+exports.getDataByEmail = (req,res) => {
+    const email = req.params.searchEmail
+   console.log(email)
+    models.Contents.find({Email: email})
+   .then(content => {
+    console.log(content)
+    res.json(content)})
+   .catch(err => res.json(err))
+}
+
 
 // Update data in contents table
 exports.updateDataById = (req, res) => {

@@ -120,29 +120,12 @@ app.get("/models", (req, res) => {
   }
 });
 
+// app.use(express.static(path.join(__dirname + "/public")));
 
-app.get('/add-website/:websiteName', (req, res) => {
-  console.log("here")
-  const { websiteName } = req.params;
-  console.log(websiteName)
-
-  // Check if the websiteName parameter matches an existing model name
-  if (website[websiteName]) {
-    res.status(400).json({ error: `Website "${websiteName}" already exists` });
-  } else {
-    // Create a new model based on the TableSchema from website.js
-    const NewWebsiteModel = mongoose.model(websiteName, CTModel.schema, websiteName);
-
-    // Add the new website to the website object
-    website[websiteName] = NewWebsiteModel;
-
-    res.status(201).json({ message: `New website "${websiteName}" added successfully` });
-  }
-});
-
-app.use(express.static(path.join(__dirname + "/public")));
-
-
+app.use(express.static(path.join(__dirname + "/client/dist")));
+app.get("*", (req,res)=>{
+  res.sendFile(path.resolve(__dirname + "/client/dist/index.html"))
+})
 
 
  

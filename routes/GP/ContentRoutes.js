@@ -8,6 +8,8 @@ router.post('/add/:table', contentController.addDataToTable);
 // Get data from contents table by ID
 router.get('/update/:id', contentController.getDataById);
 router.get("/search/:searchEmail/", contentController.getDataByEmail)
+router.get("/all", contentController.getAll)
+router.get("/search/status/:searchStatus/", contentController.getDataByStatus)
 
 // Update data in contents table by ID
 router.put('/update/:id', contentController.updateDataById);
