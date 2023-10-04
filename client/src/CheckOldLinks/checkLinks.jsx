@@ -23,7 +23,7 @@ const Table = () => {
 
     try {
       // Make a GET request to your Express backend to trigger the checkHrefRouter.
-      const response = await axios.get('/check-href');
+      const response = await axios.get('/check-href/');
       // Handle the response data as needed.
       setData(response.data);
     } catch (error) {
