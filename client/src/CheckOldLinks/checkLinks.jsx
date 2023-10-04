@@ -1,14 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios"
 
+// const Table = () => {
+ 
+
+//   return (
+//     <div>
+   
+//   </div>
+  
+//   );
+// };
+
 const Table = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  const handleCheckHref = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Make a GET request to your Express backend to trigger the checkHrefRouter.
+      const response = await axios.get('/check-href');
+      // Handle the response data as needed.
+      setData(response.data);
+    } catch (error) {
+      console.error('Error triggering checkHrefRouter:', error);
+      setError('Error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const [updatedData, setUpdatedData] = useState([]);
 
   useEffect(()=>{
     axios.get("/check-links/get-links/")
   .then(result => setUpdatedData(result.data))
   .catch(err => console.log(err))
-  },[])
+  },[data])
 
   
 
@@ -26,7 +58,14 @@ const Table = () => {
 
   return (
     <div>
-    {Object.entries(updatedData).map(([key, value]) => (
+      <h1>Check Href Page</h1>
+      <button onClick={handleCheckHref} disabled={isLoading}>
+        {isLoading ? 'Checking...' : 'Check Href'}
+      </button>
+      {isLoading && <h3>Checking...</h3>}
+      {error && <h3>Error occurred</h3>}
+        <div>
+        {Object.entries(updatedData).map(([key, value]) => (
       <div key={key} className='p-5'>
         <h2 className="text-center">{key}</h2>
         <div className="table-responsive"  > {/* Center the table */}
@@ -84,9 +123,9 @@ const Table = () => {
         </div>
       </div>
     ))}
-  </div>
-  
+        </div>
+    </div>
   );
 };
 
-export default Table;
+export default Table
