@@ -1,38 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios"
 
-// const Table = () => {
- 
-
-//   return (
-//     <div>
-   
-//   </div>
-  
-//   );
-// };
-
 const Table = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
-  const handleCheckHref = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Make a GET request to your Express backend to trigger the checkHrefRouter.
-      const response = await axios.get('/check-href/');
-      // Handle the response data as needed.
-      setData(response.data);
-    } catch (error) {
+  const handleCheckHref = ()=>{
+    axios.get("/check-href/15days/")
+    .then(result => {
+      setData(result.data)
+      console.log(result)
+    })
+    .catch(err => {
       console.error('Error triggering checkHrefRouter:', error);
       setError('Error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    })
+    .finally(()=>{
+      setIsLoading(false)
+    })
+  }
+
+  // const handleCheckHref = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
+
+  //   try {
+  //     // Make a GET request to your Express backend to trigger the checkHrefRouter.
+  //     const response = await axios.get('/check-href/');
+  //     // Handle the response data as needed.
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error('Error triggering checkHrefRouter:', error);
+  //     setError('Error occurred');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const [updatedData, setUpdatedData] = useState([]);
 
