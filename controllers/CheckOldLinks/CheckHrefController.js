@@ -50,7 +50,6 @@ exports.checkHref = async (req, res) => {
       let docId = `${collection.name}_${entry._id}`;
 
       const browser = await puppeteer.launch({ 
-        headless: "new",
         'args' : [
           '--no-sandbox',
           '--disable-setuid-sandbox'
