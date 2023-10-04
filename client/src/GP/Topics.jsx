@@ -8,8 +8,9 @@ const Topics = ({site}) => {
 
   useEffect(() => {
     axios
-      .get("/website/findWebsite/" + site)
+      .get("/content/topics/" + site)
       .then((result) => {
+        console.log(result.data)
         setContent(result.data);
       })
       .catch((err) => console.log(err));
@@ -41,12 +42,12 @@ const Topics = ({site}) => {
   const handleSelect = (row)=>{
     const table = "ExtraContents"
   
-    axios.put('http://localhost:3000/update/' + id, {DocsURL: row.DocsURL, Title: row.Title, Status:row.Status})
+    axios.put('/content/update/' + id, {DocsURL: row.DocsURL, Title: row.Title, Status:row.Status})
     .then(navigate('/GP'))
     .catch(err => console.log(err))
 
     axios
-    .delete('http://localhost:3000/delete/' + table, { data: { ids: row._id } })
+    .delete('/content/delete/' + table, { data: { ids: row._id } })
     .then(() => {
       setContent((prevContent) =>
         prevContent.filter((item) => !(row._id).includes(item._id))

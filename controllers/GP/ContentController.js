@@ -26,10 +26,8 @@ exports.getDataById = (req, res) => {
 
 exports.getDataByEmail = (req,res) => {
     const email = req.params.searchEmail
-   console.log(email)
     models.Contents.find({Email: email})
    .then(content => {
-    console.log(content)
     res.json(content)})
    .catch(err => res.json(err))
 }
@@ -55,12 +53,19 @@ exports.getDataByStatus = (req, res) => {
 };
 
 
+//get topics from ExtraContents table
+exports.getTopics = (req,res) =>{
+  const site = req.params.site
+  models.ExtraContents.find({Site: { $regex: new RegExp(site, 'i') }})
+  .then((result) => {
+    res.json(result)})
+  .catch(err => res.json(err))
+}
+
 exports.getDataByEmail = (req,res) => {
     const email = req.params.searchEmail
-   console.log(email)
     models.Contents.find({Email: email})
    .then(content => {
-    console.log(content)
     res.json(content)})
    .catch(err => res.json(err))
 }

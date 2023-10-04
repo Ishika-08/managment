@@ -5,6 +5,9 @@ const contentController = require('../../controllers/GP/ContentController');
 // Add data to the mentioned table
 router.post('/add/:table', contentController.addDataToTable);
 
+//Get topics from ExtraContents table
+router.get("/topics/:site", contentController.getTopics)
+
 // Get data from contents table by ID
 router.get('/update/:id', contentController.getDataById);
 router.get("/search/:searchEmail/", contentController.getDataByEmail)
