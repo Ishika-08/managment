@@ -48,7 +48,7 @@ const Topics = ({site, id}) => {
 
     axios
     .delete('/content/delete/' + table, { data: { ids: row._id } })
-    .then(() => {
+    .then((result) => {
       setContent((prevContent) =>
         prevContent.filter((item) => !(row._id).includes(item._id))
       );
