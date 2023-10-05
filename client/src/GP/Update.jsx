@@ -43,7 +43,7 @@ function Update() {
   };
 
   const handleSubmit = () => {
-   axios.put('http://localhost:3000/content/update/' + id, formData)
+   axios.put('/content/update/' + id, formData)
    .then(navigate('/GP'))
    .catch(err => console.log(err))
   };

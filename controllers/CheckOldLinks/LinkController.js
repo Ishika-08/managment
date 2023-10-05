@@ -75,3 +75,24 @@ exports.getFaultyLinks = async (req, res) => {
             res.status(500).json({ error: 'An error occurred' });
           }
 };
+
+//to updat checklinks table when new anchorText is entered
+exports.updateAnchorText = async (req, res) => {
+  const { rowId } = req.params; // Get the row ID from the URL parameters
+  const { newAnchorText } = req.body; // Get the new anchor text from the request body
+
+  try {
+    // Find the record with the specified row ID and update the anchor text
+    const updatedLink = await models.checkLinks.findByIdAndUpdate(rowId, { anchorText: newAnchorText }, { new: true });
+
+    if (!updatedLink) {
+      return res.status(404).json({ message: 'Link not found' });
+    }
+
+    return res.json(updatedLink);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
