@@ -78,14 +78,12 @@ exports.getFaultyLinks = async (req, res) => {
 
 //to updat checklinks table when new anchorText is entered
 exports.updateAnchorText = async (req, res) => {
-  const { rowId } = req.params; // Get the row ID from the URL parameters
-  const { newAnchorValue } = req.body; // Get the new anchor text from the request body
-  console.log(req.body)
+  const { rowId } = req.params; 
+  const { newAnchorValue } = req.body; 
 
   try {
     // Find the record with the specified row ID and update the anchor text
     const updatedLink = await models.checkLinks.findByIdAndUpdate(rowId, { anchorText: newAnchorValue });
-    console.log(updatedLink)
 
     if (!updatedLink) {
       return res.status(404).json({ message: 'Link not found' });
@@ -145,12 +143,23 @@ exports.updateWebsite = async (req, res) => {
       
             // Find the corresponding row in the website model using rowID
             const websiteRow = await websiteModel.findByIdAndUpdate({_id: updateWebsiteId}, {AnchorText: newAnchorValue});
-            console.log(websiteRow)
+            return res.json("row updated")
 
         } catch (error) {
           console.error(error);
-          res.status(500).json({ error: 'An error occurred' });
+          return res.status(500).json({ error: 'An error occurred' });
         }
 };
 
 
+exports.delete = async (req,res) =>{
+  const {id} = req.params
+  try{
+    await models.checkLinks.findByIdAndDelete({_id: id})
+    return res.json("row deleted")
+  }
+  catch(err){
+    return res.json(err)
+  }
+
+}

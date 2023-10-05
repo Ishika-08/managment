@@ -22,13 +22,31 @@ const Table = () => {
   }, [isModalOpen]);
 
   const handleDelete = (rowId) => {
-    const updatedRows = updatedData.map((keyValue) => {
-      keyValue[1] = keyValue[1].filter((row) => row.websiteRow._id !== rowId);
-      return keyValue;
-    });
-    setUpdatedData(updatedRows);
+    axios.delete("/check-links/delete/" + rowId, {})
+    .then(()=>{
+      const updatedDataCopy = { ...updatedData }; // Create a copy of the original object
+
+    for (const key in updatedDataCopy) {
+      if (updatedDataCopy.hasOwnProperty(key)) {
+        const updatedRows = updatedDataCopy[key].map((rowData) => {
+          if (rowData._id !== rowId) {
+            return rowData;
+          }
+          return null;
+        });
+    
+        // Filter out null values to remove the row with matching rowId
+        const filteredRows = updatedRows.filter((rowData) => rowData !== null);
+    
+        // Update the updatedDataCopy object with the filtered array
+        updatedDataCopy[key] = filteredRows;
+      }
+      }
+      setUpdatedData(updatedDataCopy);
+    })    
   };
 
+  
   const handleUpdate = (rowId,websiteId,tableName) => {
     setUpdateWebsiteId(websiteId)
     setTable(tableName)
@@ -110,7 +128,7 @@ const Table = () => {
                         )}
                         <button
                           className="btn btn-danger"
-                          onClick={() => handleDelete(row.websiteRow._id)}
+                          onClick={() => handleDelete(row._id)}
                         >
                           Delete
                         </button>
