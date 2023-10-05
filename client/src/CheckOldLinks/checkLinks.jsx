@@ -9,11 +9,14 @@ const Table = () => {
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('/check-links/get-links/')
-      .then((result) => setUpdatedData(result.data))
-      .catch((err) => console.log(err));
-  }, []);
+    if (!isModalOpen) {
+      // Modal is closed, fetch updated data
+      axios
+        .get('/check-links/get-links/')
+        .then((result) => setUpdatedData(result.data))
+        .catch((err) => console.log(err));
+    }
+  }, [isModalOpen]);
 
   const handleDelete = (rowId) => {
     const updatedRows = updatedData.map((keyValue) => {
@@ -39,17 +42,17 @@ const Table = () => {
         newAnchorValue
       })
       .then(() => {
-        // Update the local state with the new anchor text
-        const updatedRows = updatedData.map((keyValue) => {
-          keyValue[1] = keyValue[1].map((row) => {
-            if (row.websiteRow._id === selectedRowId) {
-              return { ...row, AnchorText: newAnchorValue };
-            }
-            return row;
-          });
-          return keyValue;
-        });
-        setUpdatedData(updatedRows);
+        // // Update the local state with the new anchor text
+        // const updatedRows = updatedData.map((keyValue) => {
+        //   keyValue[1] = keyValue[1].map((row) => {
+        //     if (row.websiteRow._id === selectedRowId) {
+        //       return { ...row, AnchorText: newAnchorValue };
+        //     }
+        //     return row;
+        //   });
+        //   return keyValue;
+        // });
+        // setUpdatedData(updatedRows);
   
         // Close the modal by setting isModalOpen to false
         setIsModalOpen(false);
