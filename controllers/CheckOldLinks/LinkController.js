@@ -85,6 +85,7 @@ exports.updateAnchorText = async (req, res) => {
   try {
     // Find the record with the specified row ID and update the anchor text
     const updatedLink = await models.checkLinks.findByIdAndUpdate(rowId, { anchorText: newAnchorValue });
+    console.log(updatedLink)
 
     if (!updatedLink) {
       return res.status(404).json({ message: 'Link not found' });
