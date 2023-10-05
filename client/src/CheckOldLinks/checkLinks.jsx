@@ -7,7 +7,10 @@ const Table = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newAnchorValue, setNewAnchorValue] = useState('');
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [updateWebsiteId, setUpdateWebsiteId] = useState()
+  const [table, setTable] = useState()
 
+  //to get all the data from checklinks table
   useEffect(() => {
     if (!isModalOpen) {
       // Modal is closed, fetch updated data
@@ -26,7 +29,9 @@ const Table = () => {
     setUpdatedData(updatedRows);
   };
 
-  const handleUpdate = (rowId) => {
+  const handleUpdate = (rowId,websiteId,tableName) => {
+    setUpdateWebsiteId(websiteId)
+    setTable(tableName)
     setSelectedRowId(rowId);
     setIsModalOpen(true);
   };
@@ -36,25 +41,16 @@ const Table = () => {
   };
 
   const handleModalEnterClick = () => {
-    // Make an API request to update the anchor text in the database
+    axios.put(`/check-links/update/${table}/${updateWebsiteId}`, {newAnchorValue})
+    .then(result => console.log(result))
+    .catch(err => console.log(err))
+
+
     axios
       .put(`/check-links/update-anchor/${selectedRowId}`, {
         newAnchorValue
       })
       .then(() => {
-        // // Update the local state with the new anchor text
-        // const updatedRows = updatedData.map((keyValue) => {
-        //   keyValue[1] = keyValue[1].map((row) => {
-        //     if (row.websiteRow._id === selectedRowId) {
-        //       return { ...row, AnchorText: newAnchorValue };
-        //     }
-        //     return row;
-        //   });
-        //   return keyValue;
-        // });
-        // setUpdatedData(updatedRows);
-  
-        // Close the modal by setting isModalOpen to false
         setIsModalOpen(false);
         setSelectedRowId(null);
         setNewAnchorValue('');
@@ -103,7 +99,7 @@ const Table = () => {
                         {row.newAnchor ? (
                           <button
                             className="btn btn-primary"
-                            onClick={() => handleUpdate(row._id)}
+                            onClick={() => handleUpdate(row._id, row.websiteRow._id, key)}
                           >
                             Update
                           </button>
