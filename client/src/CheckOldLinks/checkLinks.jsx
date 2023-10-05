@@ -36,22 +36,22 @@ const Table = () => {
     // Make an API request to update the anchor text in the database
     axios
       .put(`/check-links/update-anchor/${selectedRowId}`, {
-        AnchorText: newAnchorValue,
+        newAnchorValue
       })
       .then(() => {
         // Update the local state with the new anchor text
         const updatedRows = updatedData.map((keyValue) => {
           keyValue[1] = keyValue[1].map((row) => {
             if (row.websiteRow._id === selectedRowId) {
-              return { ...row,  AnchorText: newAnchorValue };
+              return { ...row, AnchorText: newAnchorValue };
             }
             return row;
           });
           return keyValue;
         });
         setUpdatedData(updatedRows);
-
-        // Close the modal
+  
+        // Close the modal by setting isModalOpen to false
         setIsModalOpen(false);
         setSelectedRowId(null);
         setNewAnchorValue('');
