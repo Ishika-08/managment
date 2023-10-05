@@ -76,27 +76,27 @@ exports.getFaultyLinks = async (req, res) => {
           }
 };
 
-// //to updat checklinks table when new anchorText is entered
-// exports.updateAnchorText = async (req, res) => {
-//   const { rowId } = req.params; // Get the row ID from the URL parameters
-//   const { newAnchorValue } = req.body; // Get the new anchor text from the request body
-//   console.log(req.body)
+//to updat checklinks table when new anchorText is entered
+exports.updateAnchorText = async (req, res) => {
+  const { rowId } = req.params; // Get the row ID from the URL parameters
+  const { newAnchorValue } = req.body; // Get the new anchor text from the request body
+  console.log(req.body)
 
-//   try {
-//     // Find the record with the specified row ID and update the anchor text
-//     const updatedLink = await models.checkLinks.findByIdAndUpdate(rowId, { anchorText: newAnchorValue });
-//     console.log(updatedLink)
+  try {
+    // Find the record with the specified row ID and update the anchor text
+    const updatedLink = await models.checkLinks.findByIdAndUpdate(rowId, { anchorText: newAnchorValue });
+    console.log(updatedLink)
 
-//     if (!updatedLink) {
-//       return res.status(404).json({ message: 'Link not found' });
-//     }
+    if (!updatedLink) {
+      return res.status(404).json({ message: 'Link not found' });
+    }
 
-//     return res.json(updatedLink);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: 'Server error' });
-//   }
-// };
+    return res.json(updatedLink);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
 
 exports.updateAnchorText = async (req, res) => {
   const {table} = req.params
