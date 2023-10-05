@@ -101,7 +101,8 @@ exports.getFaultyLinks = async (req, res) => {
 exports.updateAnchorText = async (req, res) => {
   const websiteName = req.params.table
   const rowId = req.params.updateWebsiteId
-  const newAnchor = req.body
+  const {newAnchorValue} = req.body
+  console.log(websiteName, rowId, newAnchorValue)
 
   try {
             // Determine the appropriate website model based on websiteName
@@ -143,7 +144,7 @@ exports.updateAnchorText = async (req, res) => {
             }
       
             // Find the corresponding row in the website model using rowID
-            const websiteRow = await websiteModel.findByIdAndUpdate({_id: rowId}, {AnchorText: newAnchor});
+            const websiteRow = await websiteModel.findByIdAndUpdate({_id: rowId}, {AnchorText: newAnchorValue});
             console.log(websiteRow)
 
         } catch (error) {
