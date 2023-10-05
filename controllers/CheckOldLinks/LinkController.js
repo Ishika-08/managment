@@ -103,7 +103,7 @@ exports.updateAnchorText = async (req, res) => {
   const rowId = req.params.updateWebsiteId
   const newAnchor = req.body
 
-  try {l
+  try {
             // Determine the appropriate website model based on websiteName
             let websiteModel;
             switch (websiteName) {
