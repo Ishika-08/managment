@@ -102,7 +102,7 @@ exports.updateAnchorText = async (req, res) => {
   const {table} = req.params
   const {updateWebsiteId} = req.params
   const {newAnchorValue} = req.body
-  console.log(websiteName, rowId, newAnchorValue)
+  console.log(table, updateWebsiteId, newAnchorValue)
 
   try {
             // Determine the appropriate website model based on websiteName
