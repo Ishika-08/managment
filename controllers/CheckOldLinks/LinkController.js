@@ -80,6 +80,7 @@ exports.getFaultyLinks = async (req, res) => {
 exports.updateAnchorText = async (req, res) => {
   const { rowId } = req.params; // Get the row ID from the URL parameters
   const { newAnchorValue } = req.body; // Get the new anchor text from the request body
+  console.log(req.body)
 
   try {
     // Find the record with the specified row ID and update the anchor text
