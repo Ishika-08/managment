@@ -98,7 +98,7 @@ exports.updateAnchorText = async (req, res) => {
   }
 };
 
-exports.updateAnchorText = async (req, res) => {
+exports.updateWebsite = async (req, res) => {
   const {table} = req.params
   const {updateWebsiteId} = req.params
   const {newAnchorValue} = req.body
