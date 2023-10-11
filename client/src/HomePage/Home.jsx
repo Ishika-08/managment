@@ -11,7 +11,10 @@ const Home = ()=>{
                 <Link to="/checkLinks" className="w-100 btn btn-secondary btn-lg mb-4">Check Old Links</Link>
                 </tr>
                 <tr>
-                <Link to="/GP" className="w-100 btn btn-success btn-lg">Work on GP</Link>
+                <Link to="/GP" className="w-100 btn btn-success btn-lg mb-4">Work on GP</Link>
+                </tr>
+                <tr>
+                <Link to="/Admin" className="w-100 btn btn-warning btn-lg">Admin</Link>
                 </tr>
             </div>
         </div>

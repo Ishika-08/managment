@@ -1,22 +1,23 @@
 import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom"
 import axios from "axios"
+import WebsiteModal from "./Components/SuggestSiteModal";
 
-function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowStatus }) {
+function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowStatus, handleChange }) {
   const [domain, setDomain] = useState()
   const [websitesFound, setWebsitesFound] = useState([])
   const [website, setWebsite] = useState([])
-  const [showWebsiteTable, setShowWebsiteTable] = useState(false);
+  const [showWebsiteModal, setShowWebsiteModal] = useState(false);
   const [updateSiteId, setUpdateSiteId] = useState()
   const [searchContent, setSearchContent] = useState(content); 
 
   
   useEffect(() => {
     setSearchContent(content);
-  }, [content]);
+  }, [content, setShowWebsiteModal]);
   
 
-
+//to find all the websites which contain the domain on clicking suggest site
   useEffect(() => {
     if (domain) {
       axios.get("/website/" + domain)
@@ -26,6 +27,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
     }
   }, [domain]); 
 
+//to get names of all the website tables
   useEffect(() => {
     axios.get("/websites/")
     .then(result => setWebsite(result.data.websiteNames))
@@ -35,31 +37,32 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 
 //used for suggest site button get domain
   const handleSite = (Email, id) => {
+    console.log("in handleSite" + Email)
     setUpdateSiteId(id);
     axios.get("/database/" + Email)
       .then(result => {
-        const websiteUrl = result.data[0].Website;
-        const url = new URL(websiteUrl);
-        const domain = url.hostname; // Extract the domain from the URL
-        setDomain(domain);
-        setShowWebsiteTable(true);
+        if (Array.isArray(result.data) && result.data.length > 0) {
+          const websiteUrl = result.data[0].Website;
+          const url = new URL(websiteUrl);
+          const domain = url.hostname; // Extract the domain from the URL
+          setDomain(domain);
+        } else {
+          console.log("No domain in the database table for this email");
+        }
       })
       .catch(err => console.log(err));
+      setShowWebsiteModal(true);
   }
   
 //used for updating site name in contents table and rerendering table
     const handleSelect = (websiteName) =>{
-      axios.put('/content/update/' + updateSiteId, {...content, Site: websiteName})
+    axios.put('/content/update/contents/' + updateSiteId, {...content, Site: websiteName})
    .then(result =>{
     console.log(result)
-    const updatedObjectIndex = content.findIndex(obj => obj._id === result.data._id);
-        if (updatedObjectIndex !== -1) {
-          const updatedContent = [...content];
-          updatedContent[updatedObjectIndex] = result.data;
-          setSearchContent(updatedContent);
-          setShowWebsiteTable(false)
-  }})
+    handleChange()
+  })
    .catch(err => console.log(err))
+   setShowWebsiteModal(false)
     }
 
 
@@ -110,7 +113,11 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
                           </div>
                         </td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Mailboxes}</td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.DocsURL}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
+                        <a href={content.DocsURL} target="_blank" rel="noopener noreferrer">
+                          {content.DocsURL}
+                        </a>
+                      </td>
                         <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Title}</td>
                         <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Email}</td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Status}</td>
@@ -129,13 +136,21 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
                               Publish
                             </Link>
                           )}
-                          {(content.Site === undefined || content.Site === "") && (
+                          {/* {(content.Site === undefined || content.Site === "") && (
                             <Link
                               className="btn btn-success"
                               onClick={()=> handleSite(content.Email, content._id)}
                             >
                               Suggest Site
                             </Link>
+                          )} */}
+                          {(content.Site === undefined || content.Site === '') && (
+                            <button
+                              className="btn btn-success"
+                              onClick={() => handleSite(content.Email, content._id)}
+                            >
+                              Suggest Site
+                            </button>
                           )}
                         </td>
                       </tr>
@@ -155,7 +170,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 
 
 {/* website table list */}
-{showWebsiteTable && (
+{/* {showWebsiteModal && (
         <section className="additional-table m-2">
           <div className="container">
             <div className="row justify-content-center">
@@ -197,8 +212,16 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
             </div>
           </div>
         </section>
-      )}
-</>
+      )} */}
+
+      <WebsiteModal
+        websitesFound={websitesFound}
+        website={website}
+        handleSelect = {handleSelect}
+        show={showWebsiteModal}
+        onHide={() => setShowWebsiteModal(false)}
+      />
+    </>
     
   );
 }

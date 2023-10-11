@@ -8,6 +8,7 @@ router.post('/add/:table', contentController.addDataToTable);
 //update data in mentioned table
 router.put('/update/:table', contentController.updataDataToTable);
 
+
 //Get topics from ExtraContents table
 router.get("/topics/:site", contentController.getTopics)
 
@@ -18,7 +19,9 @@ router.get("/all", contentController.getAll)
 router.get("/search/status/:searchStatus/", contentController.getDataByStatus)
 
 // Update data in contents table by ID
-router.put('/update/:id', contentController.updateDataById);
+router.put('/update/contents/:id', contentController.updateDataById);
+router.put('/update/topic/:id', contentController.updateTopic);
+
 
 // Delete entries from specified tables
 router.delete('/delete/:tableName', contentController.deleteEntries);

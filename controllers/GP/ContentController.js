@@ -6,10 +6,12 @@ const mongoose = require("mongoose")
 exports.addDataToTable = (req, res) => {
   const { table } = req.params;
 
+  console.log("here")
   if (models[table]) {
     const Model = models[table];
     Model.create(req.body)
       .then(contents => {
+        console.log(contents)
         res.json(contents);
       })
       .catch(err => res.json(err));
@@ -18,27 +20,6 @@ exports.addDataToTable = (req, res) => {
   }
 };
 
-
-//to update notes
-exports.updataDataToTable = async(req,res) =>{
-  const {table} = req.params;
-  const data = req.body;
-  const model = models[table]
-
-  console.log(model, data)
-  const result = await model.findByIdAndUpdate(data._id, {Note: data.Note}, { new: true })
-  const resulta = await CheckLinksModel.findByIdAndUpdate(
-    data.checkLId,
-    { $set: { 'websiteRow.Note': data.Note } },
-    { new: true }
-  );
-  
-  console.log(result)
-  console.log(resulta)
-
-  res.json(resulta)
-
-}
 
 // Get data from contents table
 exports.getDataById = (req, res) => {
@@ -70,7 +51,6 @@ exports.getDataByStatus = (req, res) => {
   // Use a case-insensitive regular expression query to match any letter case
   models.Contents.find({ Status: { $regex: new RegExp(status, 'i') } })
     .then((content) => {
-      console.log(content);
       res.json(content);
     })
     .catch((err) => res.json(err));
@@ -109,7 +89,31 @@ exports.updateDataById = (req, res) => {
     .catch(err => res.json(err));
 };
 
+//to update notes
+exports.updataDataToTable = async(req,res) =>{
+  const {table} = req.params;
+  const data = req.body;
+  const model = models[table]
 
+  const result = await model.findByIdAndUpdate(data._id, {Note: data.Note}, { new: true })
+  const resulta = await CheckLinksModel.findByIdAndUpdate(
+    data.checkLId,
+    { $set: { 'websiteRow.Note': data.Note } },
+    { new: true }
+  );
+
+  res.json(resulta)
+}
+
+//to update topic
+exports.updateTopic = async(req,res) => {
+ const {id} = req.params
+ const data = req.body
+ console.log(data)
+
+ const result = await models.Contents.findByIdAndUpdate({_id : id}, data)
+ console.log(result)
+}
 
 // Delete entries from specified tables
 exports.deleteEntries = (req, res) => {

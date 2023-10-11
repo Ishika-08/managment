@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Topic from "./Topics"
+import Topic from "./Components/TopicsModal"
 import Search from "./Search"
 import SearchTable from "./SearchTable";
 
@@ -12,69 +12,71 @@ function Home() {
     const [site, setSite] = useState()
     const [showTopics, setShowTopics] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
-    const navigate= useNavigate()
-    // console.log(showTopics)
-    // console.log(selectedIds.length)
-    // console.log(selectedIds)
+    const [showAll, setShowAll] = useState(false); 
+  const [filterStatus, setFilterStatus] = useState(); 
+  const [changeContent, setChangeContent] = useState(false)
+  const [openFilter, setOpenFilter] = useState(false)
+  const [showTopicModal, setShowTopicModal] = useState(false);
 
-    const [showAll, setShowAll] = useState(false); // State to control showing all content
-  const [filterStatus, setFilterStatus] = useState(""); // State to filter by status
- 
+
+  const navigate= useNavigate()
+
+    
+
+    
+ //get all data from contents table
   const handleShowAll = () => {
     setShowAll(true);
   };
 
+  useEffect(() => {
+    if (showAll) {
+      axios.get('/content/all')
+        .then((response) => {
+          setContent(response.data); 
+          setChangeContent(false)
+          setOpenFilter(true)
+          setShowAll(false)
+        })
+        .catch((error) => {
+          console.error('Fetch all content error:', error);
+        });
+    }
+  }, [showAll, changeContent]);
+
+
+//to handle status filter and update the content state  
   const handleFilterChange = (e) => {
     setFilterStatus(e.target.value);
   };
 
   const fetchFilteredContent = (status) => {
-    console.log(status)
     axios.get(`/content/search/status/${status}`)
         .then((response) => {
-            setContent(response.data); // Update content with filtered data
+            setContent(response.data); 
         })
         .catch((error) => {
             console.error('Fetch filtered content error:', error);
         });
 };
 
-  // Modify the useEffect for showAll to use fetchFilteredContent
   useEffect(() => {
-      if (showAll) {
-          fetchFilteredContent(""); // Fetch all content initially
-      }
-  }, [showAll]);
-
-  // Modify the useEffect for filterStatus to use fetchFilteredContent
-  useEffect(() => {
-      if (filterStatus !== "") {
-          fetchFilteredContent(filterStatus); // Fetch filtered content based on status
-      }
-  }, [filterStatus]);
-
-  useEffect(() => {
-    if (showAll) {
-      // Fetch all content from the server
-      axios.get('/content/all')
-        .then((response) => {
-          setContent(response.data); // Update content with all data
-        })
-        .catch((error) => {
-          console.error('Fetch all content error:', error);
-        });
+    if(filterStatus === ""){
+      handleShowAll()
+    }else{
+      fetchFilteredContent(filterStatus);
+      setChangeContent(false)
     }
-  }, [showAll]);
+  }, [filterStatus, changeContent]);
 
-  useEffect(() => {
-    // Filter the content based on the selected status
-    if (filterStatus !== "") {
-      const filteredContent = content.filter((item) => item.status === filterStatus);
-      setContent(filteredContent);
-    }
-  }, [filterStatus]);
+//to rerender the table when site is added using suggest site button
+const handleChange = ()=>{
+  console.log("triggered")
+  setShowAll(false)
+  setChangeContent(true)
+}
 
-
+//to store the selected ids and work with them
     const handleCheckboxChange = (event, contentId, status, site) => {
       
         if (event.target.checked) {
@@ -127,41 +129,66 @@ function Home() {
       }
 
 
-      useEffect(() => {
+      // useEffect(() => {
        
-      }, [selectedIds, selectedRowStatus]);
-    
+      // }, [selectedIds, selectedRowStatus]);
+    //for topics modal
+
+    const openTopicModal = () => {
+      console.log(showTopicModal)
+      setShowTopicModal(true)
+      console.log("end" + showTopicModal)
+
+    };
+  
+    const closeTopicModal = () => {
+      setShowTopicModal(false);
+    };
+
     const handleTopics = () => {
-        if(selectedIds.length === 1)
-        setShowTopics(true);
+      console.log(selectedIds)
+        if(selectedIds.length === 1){
+          openTopicModal()
+          console.log(showTopicModal)
+        }
     }
     
     useEffect(() => {
         setContent(searchResults);
       }, [searchResults]);
+       //used to navigate to home page
+
+
+  const navigateToHome = () => {
+    navigate("/")
+  };
+
+
 
     return (
         <>
-         <Search setSearchResults={setSearchResults} />
-                
+        <div className="position-fixed top-0 start-50 translate-middle-x bg-white w-100">
+         <button className="btn m-3" onClick={navigateToHome}>
+              <i className="fas fa-arrow-left"></i> Back to Home
+        </button>                
 
         {/* three buttons */}
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-center align-items-center ">
                     <div className="m-2">
-                    <Link to="/AddData" className="btn btn-primary btn-lg mt-5">+Add</Link>
+                    <Link to="/AddData" className="btn btn-primary btn-lg">+Add</Link>
                     </div>
 
                     <div className="m-2">
-                    <button className="btn btn-success btn-lg mt-5" onClick={handleUpdate}>Update</button>
+                    <button className="btn btn-success btn-lg" onClick={handleUpdate}>Update</button>
                     </div>
 
                     <div className="m-2">
-                    <button className="btn btn-danger btn-lg mt-5" onClick={handleDelete}>Delete</button>
+                    <button className="btn btn-danger btn-lg" onClick={handleDelete}>Delete</button>
                     </div>
 
                     <div className="m-2">
                     <button
-                        className="btn btn-info btn-lg mt-5"
+                        className="btn btn-info btn-lg"
                         onClick={handleTopics}
                         disabled={(selectedIds.length) !== 1  || selectedRowStatus !== "pending"}
                     >
@@ -172,7 +199,7 @@ function Home() {
                      {/* Show All Button */}
                     <div className="m-2">
                       <button
-                        className="btn btn-secondary btn-lg mt-5"
+                        className="btn btn-secondary btn-lg"
                         onClick={handleShowAll}
                       >
                         Show All
@@ -181,8 +208,8 @@ function Home() {
                 </div>
 
                 {/* Status Filter */}
-                {showAll && (
-                  <div className="d-flex justify-content-center align-items-center m-5">
+                {openFilter && (
+                  <div className="d-flex justify-content-center align-items-center m-2">
                     <div className="w-25">
                       <select
                         className="form-select form-select-sm" // Decrease the width using form-select-sm class
@@ -197,19 +224,23 @@ function Home() {
                     </div>
                   </div>
                 )}
+                </div>
 
-              <SearchTable
-                          content={content}
-                          handleCheckboxChange={handleCheckboxChange}
-                          selectedIds={selectedIds}
-                          selectedRowStatus={selectedRowStatus}
-                      />
+                <div className="container" style={{ marginTop: '200px' }}>
+                <Search setSearchResults={setSearchResults} />
 
-                  {showTopics && (selectedIds.length) === 1 && (
-                      <div className="container">
-                          <Topic site={site} id={selectedIds[0]}/>
-                      </div>
-                  )}  
+                <SearchTable
+                  content={content}
+                  handleCheckboxChange={handleCheckboxChange}
+                  selectedIds={selectedIds}
+                  selectedRowStatus={selectedRowStatus}
+                  handleChange = {handleChange}
+                />
+
+                {showTopicModal && selectedIds.length === 1 && (
+                    <Topic site={site} id={selectedIds[0]} showModal={showTopicModal} closeModal={closeTopicModal} handleChange={handleChange}/>
+                )}
+              </div>
         </>
     );
 }

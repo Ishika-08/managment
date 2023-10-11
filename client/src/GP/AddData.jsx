@@ -1,276 +1,124 @@
 import React, {useState} from 'react'
 import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 function CreateUser(){
     //for contents table
-    const [MailBox, setMailBox] = useState()
-    const [DocsURL, setDocsUrl] = useState()
-    const [Title, setTitle] = useState()
-    const [Email, setEmailId] = useState()
-    const [Status, setStatus] = useState()
-    const [Site, setSite] = useState()
-    const [Requirements, setRequirement] = useState()
-    const [DF, setDF] = useState()
+    const [Mailboxes, setMailBox] = useState("")
+    const [DocsURL, setDocsUrl] = useState("")
+    const [Title, setTitle] = useState("")
+    const [Email, setEmailId] = useState("")
+    const [Status, setStatus] = useState("")
+    const [Site, setSite] = useState("")
+    const [Requirements, setRequirement] = useState("")
+    const [DF, setDF] = useState("")
 
-    //for all website tables [4H, CT, Can, FAO, FP, SC, T+, TH, TW, VE]
-    //email, df, status
-    const [DA, setDA] = useState()
-    const [Website, setWebsite] = useState()
-    const [Contacted, setContacted] = useState()
-    const [Topic, setTopic] = useState()
-    const [LTE, setLTE] = useState()
-    const [AnchorText, setAnchorText] = useState()
-    const [PublishLink, setPublishLink] = useState()
-    const [SS, setSS] = useState()
-
-    //for topics2 table
-
-    //for database table
-
-    //for accounts table
 
     const navigate = useNavigate()
-    let html
 
-    let {table} = useParams()
+    const mailboxOptions = [
+        { value: "", name: "---------" },
+        { value: "4H", name: "ellieben11@gmail.com" },
+        { value: "FAO", name: "breannethorne11@gmail.com" },
+        { value: "TW", name: "quinnwilde761@gmail.com" },
+        { value: "TH", name: "eziomontoya1@gmail.com" },
+        { value: "SC", name: "johnocampos121@gmail.com" },
+        { value: "T+", name: "katiespring83@gmail.com" },
+        { value: "CT", name: "synthiawright35@gmail.com    " },
+        { value: "VE", name: "siasmith21@gmail.com" },
+        { value: "FP", name: "maddisonparker2354@gmail.com " },
+        { value: "Can", name: "adelaideferrano364@gmail.com" },
+      ];
 
 
-    const Submit = (e)=>{
+
+    const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log({MailBox, DA, Website, Email, Contacted, DF, Topic, LTE, AnchorText, PublishLink, Status, SS})
-        if( table === "H4" || table === "CT" ||table === "Can" ||table === "FAO" ||table === "FP" ||table === "SC" ||table === "T+" ||table === "TH" ||table === "TW" ||table === "VE" ){
-            if(table==="H4"){
-                table = "4H"
-            }
-            axios.post("/content/Add/" + table, {MailBox, DA, Website, Email, Contacted, DF, Topic, LTE, AnchorText, PublishLink, Status, SS})
+        const table = "Contents"
+        console.log(Mailboxes)
+        axios.post(`/content/add/${table}`, { Mailboxes, DocsURL, Title, Email, Status, Site, Requirements, DF})
             .then(result => {
                 console.log(result)
                 navigate('/GP')
             })
-            .catch(err => console.log(err))
-        }
+            .catch(err => console.error(err))
+    }
 
-        else if(table === "Contents" || table==="ExtraContents"){
-        axios.post("/content/Add/" + table, {Mailbox, DocsURL, Title, Email, Status, Site, Requirements, DF})
-            .then(result => {
-                console.log(result)
-                navigate('/GP')
-            })
-            .catch(err => console.log(err))
-        }
-        else if(table === "Database" || table === "Track"){
-            axios.post("/content/Add/" + table, {Website,Email})
-                .then(result => {
-                    console.log(result)
-                    navigate('/GP')
-                })
-                .catch(err => console.log(err))
-            }
-    }   
 
-    if( table === "H4" || table === "CT" ||table === "Can" ||table === "FAO" ||table === "FP" ||table === "SC" ||table === "T+" ||table === "TH" ||table === "TW" ||table === "VE" ){
-    html = (
+    return(
         <>
-           <div className='d-flex p-5 bg-primary justify-content-center align-items-center'>
-                <div className='w-50 bg-white rounded p-3'>
-                    <form onSubmit={Submit}>
-                        <h2>Add User to {table}</h2>
-                        <div className='mb-2'>
-                                <label htmlFor=''>Mailboxes</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setMailBox(e.target.value)}
-                                />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>DA</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setDA(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>DF</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setDF(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>SS</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setSS(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>Email ID</label>
-                            <input type='email' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setEmailId(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>Website</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setWebsite(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>Contacted</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setContacted(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>Topic</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setTopic(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>LTE</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setLTE(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>AnchorText</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setAnchorText(e.target.value)}
-                            />
-                        </div>
-                        <div className='mb-2'>
-                            <label htmlFor=''>PublishLink</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setPublishLink(e.target.value)}
-                            />
-                        </div><div className='mb-2'>
-                            <label htmlFor=''>Status</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setStatus(e.target.value)}
-                            />
-                        </div>
-                        <button className='btn btn-success'>Submit</button>
-                    </form>
-                </div>
-           </div>
-        </>
-    )
-    }
+        <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
+             <div className='w-50 bg-white rounded p-3'>
+                 <form>
+                     <h2>Add User</h2>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Mailboxes</label>
+                         {/* <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setMailBox(e.target.value)}
+                         /> */}
+                         <select
+                            className="form-control select2 select2-hidden-accessible"
+                            tabIndex="-1"
+                            aria-hidden="true"
+                            onChange={(e) => setMailBox(e.target.value)}
+                        >
+                            {mailboxOptions.map((option, index) => (
+                            <option key={index} value={option.name}>
+                                {option.value} : {option.name}
+                            </option>
+                            ))}
+                        </select>
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Docs URL</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setDocsUrl(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Title</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setTitle(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Email ID</label>
+                         <input type='email' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setEmailId(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Status</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setStatus(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Site</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setSite(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>Requirements</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setRequirement(e.target.value)}
+                         />
+                     </div>
+                     <div className='mb-2'>
+                         <label htmlFor=''>DF</label>
+                         <input type='text' placeholder='Enter Name' className='form-control'
+                             onChange =  {(e) => setDF(e.target.value)}
+                         />
+                     </div>
+                     <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
+                 </form>
+             </div>
+        </div>
+     </>
 
-    else if(table === "Contents" || table === "ExtraContents"){
-        html = (
-            <>
-               <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
-                    <div className='w-50 bg-white rounded p-3'>
-                        <form onSubmit={Submit}>
-                            <h2>Add User</h2>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Mailboxes</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setMailBox(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Docs URL</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setDocsUrl(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Title</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setTitle(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Email ID</label>
-                                <input type='email' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setEmailId(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Status</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setStatus(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Site</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setSite(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Requirements</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setRequirement(e.target.value)}
-                                />
-                            </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>DF</label>
-                                <input type='text' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setDF(e.target.value)}
-                                />
-                            </div>
-                            <button className='btn btn-success'>Submit</button>
-                        </form>
-                    </div>
-               </div>
-            </>
-        )
-    }
-    else if(table === "Database"){
-        html = (
-            <>
-               <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
-                    <div className='w-50 bg-white rounded p-3'>
-                        <form onSubmit={Submit}>
-                            <h2>Add User</h2>
-                            <div className='mb-2'>
-                            <label htmlFor=''>Website</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setWebsite(e.target.value)}
-                            />
-                        </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Email ID</label>
-                                <input type='email' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setEmailId(e.target.value)}
-                                />
-                            </div>
-                            <button className='btn btn-success'>Submit</button>
-                        </form>
-                    </div>
-               </div>
-            </>
-        )
-    }
-    else if(table === "Track"){
-        html = (
-            <>
-               <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
-                    <div className='w-50 bg-white rounded p-3'>
-                        <form onSubmit={Submit}>
-                            <h2>Add User</h2>
-                            <div className='mb-2'>
-                            <label htmlFor=''>Website</label>
-                            <input type='text' placeholder='Enter Name' className='form-control'
-                                onChange =  {(e) => setWebsite(e.target.value)}
-                            />
-                        </div>
-                            <div className='mb-2'>
-                                <label htmlFor=''>Email ID</label>
-                                <input type='email' placeholder='Enter Name' className='form-control'
-                                    onChange =  {(e) => setEmailId(e.target.value)}
-                                />
-                            </div>
-                            <button className='btn btn-success'>Submit</button>
-                        </form>
-                    </div>
-               </div>
-            </>
-        )
-    }
+    )  
 
-    return html
 }
 
 

@@ -16,7 +16,7 @@ function Search({ setSearchResults }) {
   };
 
   return (
-    <div className="container">
+    <div className="m-5">
       <br />
       <div className="row justify-content-center">
         <div className="col-12 col-md-10 col-lg-8">
