@@ -1,4 +1,6 @@
+const CheckLinksModel = require('../../models/checkLinks');
 const { models} = require('../models');
+const mongoose = require("mongoose")
 
 // Add data to the mentioned table
 exports.addDataToTable = (req, res) => {
@@ -15,6 +17,28 @@ exports.addDataToTable = (req, res) => {
     res.status(404).json({ error: 'Table not found' });
   }
 };
+
+
+//to update notes
+exports.updataDataToTable = async(req,res) =>{
+  const {table} = req.params;
+  const data = req.body;
+  const model = models[table]
+
+  console.log(model, data)
+  const result = await model.findByIdAndUpdate(data._id, {Note: data.Note}, { new: true })
+  const resulta = await CheckLinksModel.findByIdAndUpdate(
+    data.checkLId,
+    { $set: { 'websiteRow.Note': data.Note } },
+    { new: true }
+  );
+  
+  console.log(result)
+  console.log(resulta)
+
+  res.json(resulta)
+
+}
 
 // Get data from contents table
 exports.getDataById = (req, res) => {
@@ -84,6 +108,8 @@ exports.updateDataById = (req, res) => {
     })
     .catch(err => res.json(err));
 };
+
+
 
 // Delete entries from specified tables
 exports.deleteEntries = (req, res) => {

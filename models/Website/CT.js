@@ -12,7 +12,8 @@ const TableSchema = new mongoose.Schema({
     AnchorText: String,
     PublishedLink: String, 
     Status: String,
-    SS: String
+    SS: String,
+    Note: String
 })
 
 const CTModel = mongoose.model("CTModel", TableSchema, "CT")

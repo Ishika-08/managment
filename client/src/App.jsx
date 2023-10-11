@@ -1,4 +1,5 @@
 import './App.css'
+import "react-bootstrap"
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from "./HomePage/Home"
 import AddData from "./GP/SelectTable"

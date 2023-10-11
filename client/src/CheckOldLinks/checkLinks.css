@@ -1,0 +1,40 @@
+td, th{
+    max-width: 10%;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Apply styles to hyperlinks */
+  .link-cell {
+    /* Your hyperlink styles here */
+    color: #007BFF; /* Example hyperlink color */
+    text-decoration: underline; /* Example underline for links */
+  }
+
+/* for navbar buttons */
+  .button-wrapper {
+  text-align: center;
+}
+
+.button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.button-primary {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bolder;
+}
+
+.button-secondary {
+  background-color: #aac64c;
+  color: #fbf7f7;
+  font-weight: bolder;
+}

@@ -1,55 +1,114 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal'; 
+import "./checkLinks.css"
+import { Button } from 'react-bootstrap';
+import NoteModal from './components//NoteModal'; 
+import DeleteModal from "./components/DeleteModal"
+import { useNavigate } from 'react-router-dom';
 
 const Table = () => {
   const [updatedData, setUpdatedData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newAnchorValue, setNewAnchorValue] = useState('');
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [selectedCheckLId, setSelectedCheckLId] = useState(null);
   const [updateWebsiteId, setUpdateWebsiteId] = useState()
-  const [table, setTable] = useState()
+  const [selectedKey, setSelectedKey] = useState(null); // State to track the selected key
+  const [selectedTable, setSelectedTable] = useState(null)
+  const [showModal, setShowModal] = useState(false);
+  const [noteAdded, setNoteAdded] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteRow, setDeleteRow] = useState(null);
 
-  //to get all the data from checklinks table
+  // Use useEffect to trigger handleNavbar when noteAdded changes
   useEffect(() => {
-    if (!isModalOpen) {
-      // Modal is closed, fetch updated data
-      axios
-        .get('/check-links/get-links/')
-        .then((result) => setUpdatedData(result.data))
-        .catch((err) => console.log(err));
+    if (noteAdded || !isDeleteModalOpen || !isModalOpen) {
+      console.log("trigerred")
+      handleNavbar(selectedKey, selectedTable);
+      setNoteAdded(false); 
     }
-  }, [isModalOpen]);
+  }, [noteAdded, selectedKey, selectedTable, isDeleteModalOpen, isModalOpen]);
 
-  const handleDelete = (rowId) => {
-    axios.delete("/check-links/delete/" + rowId, {})
-    .then(()=>{
-      const updatedDataCopy = { ...updatedData }; // Create a copy of the original object
 
-    for (const key in updatedDataCopy) {
-      if (updatedDataCopy.hasOwnProperty(key)) {
-        const updatedRows = updatedDataCopy[key].map((rowData) => {
-          if (rowData._id !== rowId) {
-            return rowData;
-          }
-          return null;
-        });
-    
-        // Filter out null values to remove the row with matching rowId
-        const filteredRows = updatedRows.filter((rowData) => rowData !== null);
-    
-        // Update the updatedDataCopy object with the filtered array
-        updatedDataCopy[key] = filteredRows;
-      }
-      }
-      setUpdatedData(updatedDataCopy);
-    })    
+  //used to handle deleting row
+  const handleDelete = (row) => {
+    setDeleteRow(row);
+    setIsDeleteModalOpen(true);
   };
 
+  const handleConfirmDelete = () => {
+    axios.delete("/check-links/delete/" + deleteRow._id, {})
+      .then((result)=>{
+        console.log(result)
+      })
+      .catch(err =>{
+        console.log(err)
+      }) 
+
+
+    //to delete from website table
+    axios.delete(`/check-links/delete/table/${selectedTable}`, {
+      data: {
+        id: deleteRow.websiteRow._id, 
+      }})
+    .then(res => {
+      console.log(res.data)
+    })
+    .catch(err => console.log(err))
+
+    setIsDeleteModalOpen(false)
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+
+//used for notemodal
+  const handleShowModal = (rowId, checkLId) => {
+    setSelectedRowId(rowId);
+    setSelectedCheckLId(checkLId);
+    setShowModal(true);
+  };
   
-  const handleUpdate = (rowId,websiteId,tableName) => {
+  
+  const handleCloseModal = () => {
+    setShowModal(false);    
+  };
+
+
+  
+
+  const website = {
+    CT: "CTModel",
+    H4: "H4Model",
+    Can: "CanModel",
+    TH: "THModel",
+    TPlus: "TPlusModel",
+    FAO: "FAOModel",
+    FP: "FPModel",
+    SC: "SCModel",
+    TW: "TWModel",
+    VE: "VEModel"
+  };
+
+
+  const handleNavbar = (model, key) =>{
+    setSelectedKey(model)
+    setSelectedTable(key)
+        axios
+            .get(`/check-links/get-links/${model}`)
+            .then((result) => {setUpdatedData(result.data)
+            console.log(result.data)})
+            .catch((err) => console.log(err));
+  }
+  
+ 
+
+  //used for update modal
+  const handleUpdate = (rowId,websiteId) => {
     setUpdateWebsiteId(websiteId)
-    setTable(tableName)
     setSelectedRowId(rowId);
     setIsModalOpen(true);
   };
@@ -59,65 +118,123 @@ const Table = () => {
   };
 
   const handleModalEnterClick = () => {
-    axios.put(`/check-links/update/${table}/${updateWebsiteId}`, {newAnchorValue})
-    .then(result => console.log(result))
+    axios.put(`/check-links/update/${selectedTable}/${selectedRowId}`, {newAnchorValue, updateWebsiteId})
+    .then(result => {
+      setIsModalOpen(false)
+      setSelectedRowId(null);
+      setNewAnchorValue('');
+    })
     .catch(err => console.log(err))
+  };
 
-
-    axios
-      .put(`/check-links/update-anchor/${selectedRowId}`, {
-        newAnchorValue
-      })
-      .then(() => {
-        setIsModalOpen(false);
-        setSelectedRowId(null);
-        setNewAnchorValue('');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  //used to navigate to home page
+  const navigate = useNavigate()
+  const navigateToHome = () => {
+    navigate("/")
   };
 
   return (
     <div>
-      <h1 className="m-4 text-center">Check Old Links</h1>
-      <div>
-        {Object.entries(updatedData).map(([key, value]) => (
-          <div key={key} className="p-5">
-            <h2 className="text-center">{key}</h2>
-            <div className="table-responsive" style={{ textAlign: 'center' }}>
-              <table className="table table-bordered" style={{ maxWidth: '100%' }}>
-              <thead>
+    <button className="btn m-3" onClick={navigateToHome}>
+              <i className="fas fa-arrow-left"></i> Back to Home
+    </button>
+
+
+    <div>
+    <div>
+      <nav className="navbar d-flex justify-content-center align-items-center">
+          <div className="button-wrapper"> 
+            {Object.keys(website).map((key) => (
+              <button
+                key={key}
+                className={`button ${selectedKey === key ? 'button-primary' : 'button-secondary'}`}
+                onClick={() => handleNavbar(website[key], key)}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+      </nav>
+    </div>
+
+
+      
+        {(<div>      
+          <div key={selectedKey} className="p-5">
+            <h2 className="text-center" style={{ backgroundColor: '#F0F0F0', color: '#333', padding: '10px 0', margin: '0', fontSize: '20px', width: '100%', textAlign: 'center' }}>
+              {selectedTable}
+            </h2>
+            <div className="table-responsive" style={{ textAlign: 'center', overflowX: 'auto' }}>
+              <table className="table table-bordered" style={{ width: '100%', tableLayout: 'fixed' }}>
+                <colgroup>
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                </colgroup>
+                <thead>
                   <tr>
-                    <th style={{ maxWidth: '10%' }}>Mailbox</th>
-                    <th style={{ maxWidth: '10%' }}>Email</th>
-                    <th style={{ maxWidth: '10%' }}>DF</th>
-                    <th style={{ maxWidth: '10%' }}>Topic</th>
-                    <th style={{ maxWidth: '10%' }}>LTE</th>
-                    <th style={{ maxWidth: '10%' }}>AnchorText</th>
-                    <th style={{ maxWidth: '10%' }}>PublishedLink</th>
-                    <th style={{ maxWidth: '10%' }}>Status</th>
-                    <th style={{ maxWidth: '10%' }}>New AnchorText</th>
-                    <th style={{ maxWidth: '10%' }}>Action</th>
+                    <th>Mailbox</th>
+                    <th>Email</th>
+                    <th>DF</th>
+                    <th>Topic</th>
+                    <th>LTE</th>
+                    <th>AnchorText</th>
+                    <th>PublishedLink</th>
+                    <th>Status</th>
+                    <th>New AnchorText</th>
+                    <th>Note</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {value.map((row) => (
+                  {updatedData.map((row) => (
                     <tr key={row._id}>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.Mailbox}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.Email}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.DF}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.Topic}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.LTE}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.AnchorText}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.PublishedLink}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.websiteRow.Status}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>{row.newAnchor}</td>
-                      <td style={{ maxWidth: '10%', wordWrap: 'break-word' }}>
+                      <td>{row.websiteRow.Mailbox}</td>
+                      <td>{row.websiteRow.Email}</td>
+                      <td>{row.websiteRow.DF}</td>
+                      <td>{row.websiteRow.Topic}</td>
+                      <td>
+                        {row.websiteRow.LTE ? (
+                          <a href={row.websiteRow.LTE} target="_blank" rel="noopener noreferrer">
+                            {row.websiteRow.LTE}
+                          </a>
+                        ) : (
+                          'N/A' 
+                        )}
+                      </td>
+                      <td>
+                        {row.websiteRow.AnchorText}
+                      </td>
+                      <td>
+                        <a href={row.websiteRow.PublishedLink} target="_blank" rel="noopener noreferrer">
+                          {row.websiteRow.PublishedLink}
+                        </a>
+                      </td>
+                      <td>{row.websiteRow.Status}</td>
+                      <td>{row.newAnchor}</td>
+                      <td>
+                      {row.websiteRow.Note !== undefined && (
+                        <div>
+                          {row.websiteRow.Note}
+                        </div>
+                      )}
+                      <Button variant="primary" onClick={() => handleShowModal(row.websiteRow._id, row._id)}>
+                        Add note
+                      </Button>
+                      </td>
+                      <td>
                         {row.newAnchor ? (
                           <button
                             className="btn btn-primary"
-                            onClick={() => handleUpdate(row._id, row.websiteRow._id, key)}
+                            onClick={() => handleUpdate(row._id, row.websiteRow._id, selectedKey)}
                           >
                             Update
                           </button>
@@ -128,7 +245,7 @@ const Table = () => {
                         )}
                         <button
                           className="btn btn-danger"
-                          onClick={() => handleDelete(row._id)}
+                          onClick={() => handleDelete(row)}
                         >
                           Delete
                         </button>
@@ -136,13 +253,14 @@ const Table = () => {
                     </tr>
                   ))}
                 </tbody>
+
               </table>
             </div>
           </div>
-        ))}
+        </div>)}
       </div>
 
-      {/* Modal Dialog */}
+    
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
@@ -156,9 +274,29 @@ const Table = () => {
           onChange={handleModalInputChange}
         />
         <button onClick={handleModalEnterClick}>Enter</button>
-      </Modal>
-    </div>
+      </Modal> 
+
+      {/* Render the BootstrapModal component */}
+      <NoteModal 
+      show={showModal} 
+      onClose={handleCloseModal} 
+      id={selectedRowId} 
+      table={selectedTable} 
+      checkLId={selectedCheckLId}
+      onNoteAdded={() => setNoteAdded(true)}
+      />
+
+    <DeleteModal
+        show={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onDelete={handleConfirmDelete}
+      />
+      </div>
+
+      
+
   );
-};
+}
 
 export default Table;
+

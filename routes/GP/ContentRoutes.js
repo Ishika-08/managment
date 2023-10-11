@@ -5,6 +5,9 @@ const contentController = require('../../controllers/GP/ContentController');
 // Add data to the mentioned table
 router.post('/add/:table', contentController.addDataToTable);
 
+//update data in mentioned table
+router.put('/update/:table', contentController.updataDataToTable);
+
 //Get topics from ExtraContents table
 router.get("/topics/:site", contentController.getTopics)
 
