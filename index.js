@@ -12,6 +12,7 @@ const contentRouter = require('./routes/GP/ContentRoutes');
 const trackRouter = require('./routes/Pitch/TrackRouter');
 const LinkRouter = require('./routes/CheckOldLinks/LinkRouter');
 const checkHrefRouter = require('./routes/CheckOldLinks/CheckHrefRouter');
+const adminRouter = require('./routes/Admin/adminRoutes');
 
 const ContentsModel = require("./models/Content/Contents")
 const ExtraContentsModel = require("./models/Content/ExtraContent")
@@ -70,6 +71,7 @@ connectToDatabase()
 app.use('/database', databaseRouter);
 app.use('/website', websiteRouter);
 app.use('/content', contentRouter);
+app.use("/admin", adminRouter)
 
 
 //for Pitch

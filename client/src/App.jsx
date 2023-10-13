@@ -10,6 +10,7 @@ import Pitch from "./Pitch/pitch"
 import Publish from "./GP/Publish"
 import CheckLinks from "./CheckOldLinks/checkLinks"
 import Admin from "./Admin/Admin"
+import AddData from "./Admin/AddDataModal"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -29,8 +30,12 @@ function App() {
         {/* GP routes */}
         <Route path="/AddData" element={<Add/>}></Route>
         <Route path="/GP/Update/:id/" element={<Update/>}></Route>
+
         {/* <Route path="/GP/Topics/:site" element={<Topic/>}></Route> */}
         <Route path="/GP/publish/:table/:id" element={<Publish/>}></Route>
+
+        {/* Routes for Admin */}
+        <Route path="/Admin/AddData" element = {<AddData/>}></Route>
       </Routes>
     </BrowserRouter>
   )

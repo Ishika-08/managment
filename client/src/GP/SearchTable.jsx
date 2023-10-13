@@ -219,7 +219,10 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
         website={website}
         handleSelect = {handleSelect}
         show={showWebsiteModal}
-        onHide={() => setShowWebsiteModal(false)}
+        onHide={() => {
+          setShowWebsiteModal(false)
+          //make the websitesFound array empty
+        }}
       />
     </>
     
