@@ -40,6 +40,7 @@ function CSVFileUpload() {
 
 
   const handleWebsite = ()=>{
+    setShowFile(false)
     axios.get("/admin/websites/")
     .then((result) =>{
       setAllWebsites(result.data)
@@ -51,6 +52,7 @@ function CSVFileUpload() {
 
  const handleDatabase = ()=>{
   setTable("Databases")
+  setAllWebsites([])
   setShowFile(true)
  }
 
