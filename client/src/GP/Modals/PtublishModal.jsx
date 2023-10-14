@@ -89,7 +89,6 @@ const Publish = ({show, onClose, id , site}) => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary">Close</Button>
           <Button variant="success" onClick={handleSubmit}>Publish</Button>
         </Modal.Footer>
       </Modal>     
