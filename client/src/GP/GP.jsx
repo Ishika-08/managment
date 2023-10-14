@@ -1,30 +1,47 @@
 import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import Topic from "./Components/TopicsModal"
+import {useNavigate } from 'react-router-dom';
+import Topic from "./Modals/TopicsModal"
 import Search from "./Search"
 import SearchTable from "./SearchTable";
+import AddModal from "./Modals/AddDataModal"
+import UpdateModal from "./Modals/UpdateModal"
 
 function Home() {
-    const [content, setContent] = useState([]);
-    const [selectedRowStatus, setSelectedRowStatus] = useState();
-    const [selectedIds, setSelectedIds] = useState([]);
-    const [site, setSite] = useState()
-    const [showTopics, setShowTopics] = useState(false);
-    const [searchResults, setSearchResults] = useState([]);
-    const [showAll, setShowAll] = useState(false); 
+  const [content, setContent] = useState([]);
+  const [selectedRowStatus, setSelectedRowStatus] = useState();
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [site, setSite] = useState()
+  const [searchResults, setSearchResults] = useState([]);
+  const [showAll, setShowAll] = useState(false); 
   const [filterStatus, setFilterStatus] = useState(); 
   const [changeContent, setChangeContent] = useState(false)
   const [openFilter, setOpenFilter] = useState(false)
   const [showTopicModal, setShowTopicModal] = useState(false);
 
-
   const navigate= useNavigate()
 
-    
+  //to handle AddData button Modal
+  const [showAddForm, setAddForm] = useState(false)
+  const handleCloseAddFormModal = () => setAddForm(false);
+  const handleShowAddFormModal = () => setAddForm(true);
 
-    
- //get all data from contents table
+  //to handle update button modal
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const handleUpdateClose = () => setShowUpdateModal(false);
+  const handleUpdateShow = () => {
+    setShowUpdateModal(true);
+  }
+  const handleUpdate = () =>{
+    if(selectedIds.length === 1){
+      handleUpdateShow()
+    }else{
+      console.log("selectedIds.length = " + selectedIds.length)
+    }
+  }
+
+  //get all data from contents table
   const handleShowAll = () => {
     setShowAll(true);
   };
@@ -77,24 +94,23 @@ const handleChange = ()=>{
 }
 
 //to store the selected ids and work with them
-    const handleCheckboxChange = (event, contentId, status, site) => {
-      
-        if (event.target.checked) {
-            setSite(site);
-          setSelectedIds((prev) => [...prev, contentId]);
-          setSelectedRowStatus(status);
-        } else {
-          const updatedSelectedIds = selectedIds.filter(id => id !== contentId);
-          setSelectedIds(updatedSelectedIds);
-          setShowTopics(false);
-
-      
-          if (updatedSelectedIds.length === 0) {
-            setSelectedRowStatus("");
-          }
-        }
-      };
-      
+const handleCheckboxChange = (event, contentId, status, site) => {
+  console.log(status)
+    if (event.target.checked) {
+      setSite(site);
+      setSelectedIds((prev) => [...prev, contentId]);
+      setSelectedRowStatus(status);
+    } else {
+      const updatedSelectedIds = selectedIds.filter(id => id !== contentId);
+      setSelectedIds(updatedSelectedIds);
+      // setShowTopics(false);
+  
+      if (updatedSelectedIds.length === 0) {
+        setSelectedRowStatus("");
+      }
+    }
+  };
+  
       
 
       const handleDelete = () => {
@@ -118,26 +134,9 @@ const handleChange = ()=>{
       };
       
 
-      const handleUpdate = (e)=>{
-        e.preventDefault()
-        if(selectedIds.length === 1){
-            navigate(`Update/${selectedIds[0]}`)
-        }
-        else{
-                <h4>You can only update one entry at a time</h4>
-        }
-      }
-
-
-      // useEffect(() => {
-       
-      // }, [selectedIds, selectedRowStatus]);
     //for topics modal
-
     const openTopicModal = () => {
-      console.log(showTopicModal)
       setShowTopicModal(true)
-      console.log("end" + showTopicModal)
 
     };
   
@@ -146,13 +145,12 @@ const handleChange = ()=>{
     };
 
     const handleTopics = () => {
-      console.log(selectedIds)
         if(selectedIds.length === 1){
           openTopicModal()
-          console.log(showTopicModal)
         }
     }
-    
+ 
+    //to handle search results
     useEffect(() => {
         setContent(searchResults);
       }, [searchResults]);
@@ -174,26 +172,43 @@ const handleChange = ()=>{
 
         {/* three buttons */}
                 <div className="d-flex justify-content-center align-items-center ">
-                    <div className="m-2">
-                    <Link to="/AddData" className="btn btn-primary btn-lg">+Add</Link>
-                    </div>
 
                     <div className="m-2">
-                    <button className="btn btn-success btn-lg" onClick={handleUpdate}>Update</button>
-                    </div>
+                    <Button variant="primary" className = "btn btn-lg" onClick={handleShowAddFormModal}>
+                      Add Entry
+                    </Button>
+                    <AddModal show={showAddForm} handleClose={handleCloseAddFormModal} />                   
+                     </div>
+
+                     <div className="m-2">
+                    <Button variant="success" className = "btn btn-lg" onClick={handleUpdate}>
+                      Update
+                    </Button>
+                      <UpdateModal show={showUpdateModal} handleClose={handleUpdateClose} id={selectedIds[0]}/>                   
+                     </div>
+
 
                     <div className="m-2">
                     <button className="btn btn-danger btn-lg" onClick={handleDelete}>Delete</button>
-                    </div>
+                    </div> 
+
 
                     <div className="m-2">
                     <button
                         className="btn btn-info btn-lg"
                         onClick={handleTopics}
-                        disabled={(selectedIds.length) !== 1  || selectedRowStatus !== "pending"}
+                        disabled={(selectedIds.length) !== 1  || !selectedRowStatus.toLowerCase().includes("pending")}
                     >
                         Topics
                     </button>
+                    <Topic 
+                    site={site} 
+                    id={selectedIds[0]} 
+                    showModal={showTopicModal} 
+                    closeModal={closeTopicModal} 
+                    handleChange={handleChange}
+                    setSelectedIds = { setSelectedIds}
+                    />
                     </div>
 
                      {/* Show All Button */}
@@ -212,7 +227,7 @@ const handleChange = ()=>{
                   <div className="d-flex justify-content-center align-items-center m-2">
                     <div className="w-25">
                       <select
-                        className="form-select form-select-sm" // Decrease the width using form-select-sm class
+                        className="form-select form-select-sm" 
                         value={filterStatus}
                         onChange={handleFilterChange}
                       >
@@ -237,9 +252,6 @@ const handleChange = ()=>{
                   handleChange = {handleChange}
                 />
 
-                {showTopicModal && selectedIds.length === 1 && (
-                    <Topic site={site} id={selectedIds[0]} showModal={showTopicModal} closeModal={closeTopicModal} handleChange={handleChange}/>
-                )}
               </div>
         </>
     );

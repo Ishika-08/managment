@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from 'react-modal'; 
 import "./checkLinks.css"
-import { Button } from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap';
 import NoteModal from './components//NoteModal'; 
 import DeleteModal from "./components/DeleteModal"
 import { useNavigate } from 'react-router-dom';
@@ -260,21 +259,28 @@ const Table = () => {
         </div>)}
       </div>
 
-    
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Update Anchor Text"
-      >
-        <h2>Update Anchor Text</h2>
-        <input
-          type="text"
-          placeholder="New Anchor Text"
-          value={newAnchorValue}
-          onChange={handleModalInputChange}
-        />
-        <button onClick={handleModalEnterClick}>Enter</button>
-      </Modal> 
+      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} size="md">
+        <Modal.Header closeButton>
+          <Modal.Title>Update Anchor Text</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input
+            type="text"
+            placeholder="New Anchor Text"
+            value={newAnchorValue}
+            className="form-control"
+            onChange={handleModalInputChange}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleModalEnterClick}>
+            Enter
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Render the BootstrapModal component */}
       <NoteModal 

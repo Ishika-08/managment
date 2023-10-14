@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button, Table } from "react-bootstrap";
 
-const Topics = ({ site, id, showModal, closeModal, handleChange }) => {
+const Topics = ({ site, id, showModal, closeModal, handleChange, setSelectedIds}) => {
   const [content, setContent] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [copiedTitles, setCopiedTitles] = useState("");
@@ -11,7 +11,6 @@ const Topics = ({ site, id, showModal, closeModal, handleChange }) => {
     axios
       .get("/content/topics/" + site)
       .then((result) => {
-        console.log(result.data);
         setContent(result.data);
       })
       .catch((err) => console.log(err));
@@ -58,9 +57,10 @@ const Topics = ({ site, id, showModal, closeModal, handleChange }) => {
         setContent((prevContent) =>
           prevContent.filter((item) => item._id !== row._id)
         );
+        handleChange();
+        closeModal();
+        setSelectedIds([]);
       })
-      handleChange()
-      closeModal()
       .catch((error) => {
         console.error("Delete request error:", error);
       });

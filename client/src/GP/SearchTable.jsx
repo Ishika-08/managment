@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom"
 import axios from "axios"
-import WebsiteModal from "./Components/SuggestSiteModal";
+import WebsiteModal from "./Modals/SuggestSiteModal";
+import Publish from "./Modals/PtublishModal"
+
 
 function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowStatus, handleChange }) {
   const [domain, setDomain] = useState()
@@ -66,18 +68,34 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
     }
 
 
+//to handle publish data modal
+const [publishContent, setPublishContent] = useState({ id: null, site: null, showPublish: false });
+const openPublishForEntry = (id, site) => {
+  setPublishContent({ id, site, showPublish: true });
+  console.log(publishContent)
+};
+const closePublishForEntry = () => {
+  setPublishContent({ ...publishContent, showPublish: false });
+};
 
   return (
     <>
 {/* Search result table */}
 <section className="intro m-2">
-  <div className="gradient-custom-2 h-100">
-    <div className="mask d-flex align-items-center h-100">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12">
-            <div className="table-responsive">
-              <table className="table table-light table-bordered mb-0">
+<div className="table-responsive" style={{ textAlign: 'center', overflowX: 'auto' }}>
+              <table className="table table-bordered" style={{ width: '100%', tableLayout: 'fixed' }}>
+                <colgroup>
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '9%' }} />
+                  <col style={{ width: '10%' }} />
+                </colgroup>
                 <thead>
                   <tr>
                     <th scope="col" className="col-1">Select</th>
@@ -89,7 +107,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
                     <th scope="col" className="col-1">Site</th>
                     <th scope="col" className="col-2">Requirements</th>
                     <th scope="col" className="col-1">DF</th>
-                    <th scope="col" className="col-1">Action</th> {/* New column */}
+                    <th scope="col" className="col-1">Action</th> 
                   </tr>
                 </thead>
                 <tbody>
@@ -125,25 +143,15 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
                         <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Requirements}</td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.DF}</td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
-                          {content.Status === ("sent" || "Sent") && (
-                            <Link
-                              to={`/GP/publish/${content.Site}/${content._id}/`}
+                          {content?.Status?.toLowerCase().includes("sent") && (
+                            <button
                               className="btn btn-success"
-                              onClick={() => {
-                                // Handle publish action here
-                              }}
+                              onClick={() => openPublishForEntry(content._id, content.Site)}
                             >
                               Publish
-                            </Link>
+                            </button>
                           )}
-                          {/* {(content.Site === undefined || content.Site === "") && (
-                            <Link
-                              className="btn btn-success"
-                              onClick={()=> handleSite(content.Email, content._id)}
-                            >
-                              Suggest Site
-                            </Link>
-                          )} */}
+
                           {(content.Site === undefined || content.Site === '') && (
                             <button
                               className="btn btn-success"
@@ -159,60 +167,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
-
-
-
-
-{/* website table list */}
-{/* {showWebsiteModal && (
-        <section className="additional-table m-2">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-12">
-                <h2>Website Information</h2>
-                <table className="table table-light table-bordered mb-0">
-                  <thead>
-                    <tr>
-                      <th scope="col">Website Name</th>
-                      <th scope="col">Presence</th>
-                      <th scope="col">Select</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {website.map((websiteName, index) => {
-                      const isPresent = websitesFound.includes(websiteName);
-                      const textColorClass = isPresent ? "text-success" : "text-danger"; 
-
-                      return (
-                        <tr key={index}>
-                          <td>{websiteName}</td>
-                          <td className={textColorClass}>{isPresent ? "Present" : "Not Present"}</td>
-                          <td>
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => {
-                                handleSelect(websiteName)
-                              }}
-                            >
-                              Select
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-      )} */}
 
       <WebsiteModal
         websitesFound={websitesFound}
@@ -224,7 +179,19 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
           //make the websitesFound array empty
         }}
       />
+
+      {publishContent.showPublish && (
+        <Publish
+          show={publishContent.showPublish}
+          onClose={closePublishForEntry}
+          id={publishContent.id}
+          site={publishContent.site}
+        />
+      )}
     </>
+
+    
+
     
   );
 }

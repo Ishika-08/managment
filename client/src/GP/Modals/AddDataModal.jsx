@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import { Button, Modal } from 'react-bootstrap'
 import axios from 'axios'
 import { useNavigate} from 'react-router-dom'
 
-function CreateUser(){
+function CreateUser({ show, handleClose }){
     //for contents table
     const [Mailboxes, setMailBox] = useState("")
     const [DocsURL, setDocsUrl] = useState("")
@@ -12,24 +13,22 @@ function CreateUser(){
     const [Site, setSite] = useState("")
     const [Requirements, setRequirement] = useState("")
     const [DF, setDF] = useState("")
+    const [mailboxOptions, setmailBoxOptions] = useState([])
 
 
     const navigate = useNavigate()
 
-    const mailboxOptions = [
-        { value: "", name: "---------" },
-        { value: "4H", name: "ellieben11@gmail.com" },
-        { value: "FAO", name: "breannethorne11@gmail.com" },
-        { value: "TW", name: "quinnwilde761@gmail.com" },
-        { value: "TH", name: "eziomontoya1@gmail.com" },
-        { value: "SC", name: "johnocampos121@gmail.com" },
-        { value: "T+", name: "katiespring83@gmail.com" },
-        { value: "CT", name: "synthiawright35@gmail.com    " },
-        { value: "VE", name: "siasmith21@gmail.com" },
-        { value: "FP", name: "maddisonparker2354@gmail.com " },
-        { value: "Can", name: "adelaideferrano364@gmail.com" },
-      ];
 
+    useEffect(()=>{
+        axios.get("/admin/websites/")
+    .then((result) =>{
+        console.log(result.data)
+      setmailBoxOptions(result.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    }, [])
 
 
     const handleSubmit = (e)=>{
@@ -42,29 +41,31 @@ function CreateUser(){
                 navigate('/GP')
             })
             .catch(err => console.error(err))
+        handleClose()
     }
 
 
     return(
         <>
-        <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
-             <div className='w-50 bg-white rounded p-3'>
+         <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add New User</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <div className='bg-white rounded p-3'>
                  <form>
-                     <h2>Add User</h2>
                      <div className='mb-2'>
                          <label htmlFor=''>Mailboxes</label>
-                         {/* <input type='text' placeholder='Enter Name' className='form-control'
-                             onChange =  {(e) => setMailBox(e.target.value)}
-                         /> */}
                          <select
                             className="form-control select2 select2-hidden-accessible"
                             tabIndex="-1"
                             aria-hidden="true"
                             onChange={(e) => setMailBox(e.target.value)}
                         >
+                            <option value = "">---------</option>
                             {mailboxOptions.map((option, index) => (
-                            <option key={index} value={option.name}>
-                                {option.value} : {option.name}
+                            <option key={index} value={option.MailBox}>
+                                {option.Website} : {option.MailBox}
                             </option>
                             ))}
                         </select>
@@ -89,15 +90,36 @@ function CreateUser(){
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Status</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
-                             onChange =  {(e) => setStatus(e.target.value)}
-                         />
+                         <select
+                            className="form-control select2 select2-hidden-accessible"
+                            tabIndex="-1"
+                            aria-hidden="true"
+                            onChange={(e) => setStatus(e.target.value)}
+                        >
+                           <option value="">-------</option>
+                           <option value="Link Added">Link Added</option>
+                           <option value="Sent">Sent</option>
+                           <option value="Pending">Pending</option>
+                        </select>
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Site</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
-                             onChange =  {(e) => setSite(e.target.value)}
-                         />
+                         <select
+                            className="form-control select2 select2-hidden-accessible"
+                            tabIndex="-1"
+                            aria-hidden="true"
+                            onChange={(e) => setSite(e.target.value)}
+                        >
+                            <option value = "">---------</option>
+
+                            {mailboxOptions.map((element, index) => {
+                            return (
+                            <option key={index} value={element.Website}>
+                                {element.Website}
+                            </option>
+                            );
+                        })}
+                        </select>
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Requirements</label>
@@ -107,14 +129,27 @@ function CreateUser(){
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>DF</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
-                             onChange =  {(e) => setDF(e.target.value)}
-                         />
+                         <select
+                            className="form-control select2 select2-hidden-accessible"
+                            tabIndex="-1"
+                            aria-hidden="true"
+                            onChange={(e) => setDF(e.target.value)}
+                        >
+                           <option value="">-------</option>
+                           <option value="Yes">Yes</option>
+                           <option value="No">No</option>
+                        </select>
                      </div>
-                     <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
                  </form>
              </div>
-        </div>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
      </>
 
     )  
