@@ -9,6 +9,7 @@ import Admin from "./Admin/Admin"
 import AddData from "./Admin/AddDataModal"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "@fortawesome/fontawesome-free/css/all.css";
+import LoginForm from './HomePage/LoginForm'
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home/>}></Route>
+        <Route path="/" element = {<LoginForm/>}></Route>
+        <Route path="/Home" element={<Home/>}></Route>
         <Route path="/Admin" element={<Admin/>}></Route>
         <Route path="/Pitch" element={<Pitch/>}></Route>
         <Route path="/GP" element={<GP/>}></Route>

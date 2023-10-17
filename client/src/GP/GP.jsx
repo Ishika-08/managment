@@ -158,7 +158,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
 
 
   const navigateToHome = () => {
-    navigate("/")
+    navigate("/Home")
   };
 
 
@@ -168,7 +168,8 @@ const handleCheckboxChange = (event, contentId, status, site) => {
         <div className="position-fixed top-0 start-50 translate-middle-x bg-white w-100">
          <button className="btn m-3" onClick={navigateToHome}>
               <i className="fas fa-arrow-left"></i> Back to Home
-        </button>                
+        </button>         
+               
 
         {/* three buttons */}
                 <div className="d-flex justify-content-center align-items-center ">

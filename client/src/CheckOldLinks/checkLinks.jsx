@@ -129,7 +129,7 @@ const Table = () => {
   //used to navigate to home page
   const navigate = useNavigate()
   const navigateToHome = () => {
-    navigate("/")
+    navigate("/Home")
   };
 
   return (

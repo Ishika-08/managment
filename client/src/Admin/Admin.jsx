@@ -1,10 +1,16 @@
 import {useState} from "react"
 import CreateTableModal from "./components/createTableModal"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 const Admin = ()=>{
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate()
+
+    const navigateToHome = () => {
+      navigate("/Home")
+    };
 
     const handleShow = () => {
       setShow(true);
@@ -15,6 +21,9 @@ const Admin = ()=>{
     };
     return(
         <>
+        <button className="btn m-3" onClick={navigateToHome}>
+              <i className="fas fa-arrow-left"></i> Back to Home
+            </button>
             <h2 className="m-3 text-center">{message}</h2>
 
             <div className="container d-flex justify-content-center align-items-center vh-100">

@@ -13,6 +13,8 @@ const trackRouter = require('./routes/Pitch/TrackRouter');
 const LinkRouter = require('./routes/CheckOldLinks/LinkRouter');
 const checkHrefRouter = require('./routes/CheckOldLinks/CheckHrefRouter');
 const adminRouter = require('./routes/Admin/adminRoutes');
+const SignUpRouter = require('./routes/SignUp/UserSignUpRoute');
+
 
 const ContentsModel = require("./models/Content/Contents")
 const ExtraContentsModel = require("./models/Content/ExtraContent")
@@ -81,24 +83,8 @@ app.use('/track', trackRouter);
 app.use('/check-href', checkHrefRouter);
 app.use('/check-links', LinkRouter);
 
-
-// Schedule the script to run every 15 days at midnight
-// cron.schedule('0 0 */15 * *', () => {
-//   console.log('Running the script every 15 days at midnight.');
-
-  // Trigger the '/check-href' route by making an HTTP GET request to your own server
-//   axios.get('http://localhost:4000/check-href')
-//     .then(response => {
-//       console.log('Check-href route triggered successfully.');
-//       // You can log or handle the response if needed.
-//     })
-//     .catch(error => {
-//       console.error('Error triggering check-href route:', error);
-//       // Handle the error if the request fails.
-//     });
-// });
-
-
+//for SignUp
+app.use("/signup", SignUpRouter)
 
 
 //to get the name of all the websites(website sheets) present in GP
@@ -122,8 +108,7 @@ app.get("/models", (req, res) => {
   }
 });
 
-// app.use(express.static(path.join(__dirname + "/public")));
-
+//to serve static files from (dist) build folder
 app.use(express.static(path.join(__dirname + "/client/dist")));
 app.get("*", (req,res)=>{
   res.sendFile(path.resolve(__dirname + "/client/dist/index.html"))

@@ -12,7 +12,7 @@ const AddData = () => {
 
 
   const navigateToHome = () => {
-    navigate("/")
+    navigate("/Home")
   };
 
   const handleChange = (e) => {
