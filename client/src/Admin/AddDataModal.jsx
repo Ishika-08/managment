@@ -85,6 +85,24 @@ function CSVFileUpload() {
 
       <div className="container d-flex justify-content-center align-items-center">
             <div className="row justify-content-center align-items-center">
+            <tr>
+            <div  className="w-100">
+            <a href={`/websiteExample.csv`} download>
+              <button className="btn btn-success btn-lg mb-4">
+                <i className="fas fa-download"></i> Download Website Example
+              </button>
+            </a>
+          </div>
+            </tr>
+            <tr>
+            <div  className="w-100">
+            <a href={`/databaseExample.csv`} download>
+              <button className="btn btn-success btn-lg mb-4">
+                <i className="fas fa-download"></i> Download Database Example
+              </button>
+            </a>
+          </div>
+            </tr>
                 <tr>
                 <button className="w-100 btn btn-primary btn-lg mb-4" onClick = {() => handleWebsite()}>Add data to Website Table</button>
                 </tr>

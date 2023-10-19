@@ -6,39 +6,6 @@ const csv = require('csv-parser');
 const ContentsModel = require('../../models/Content/Contents');
 const mongoose = require("mongoose")
 
-// exports.createCollection = async(req, res) => {
-//   console.log("in admin Controller")
-//   const { collectionName } = req.params;
-//   const {MailBox} = req.body
-
-//   try{
-//     if (!collectionName) {
-//         return res.status(400).json({ error: "Collection name is required" });
-//       }else{
-//         const CustomModel = getModelWithCollectionName(collectionName);
-//         const newDoc = {
-//           Website: collectionName,
-//           MailBox: MailBox
-//         };
-        
-//         try {
-//           const result = await TrackCollectionModel.insertMany([newDoc]);
-//           res.status(201).json({ message: "Collection created successfully" });
-//         } catch (error) {
-//           console.error(error);
-//           res.status(500).json({ error: "Failed to create collection" });
-//         }
-//         console.log(result)
-//     }
-//   }
-//     catch(err) {
-//       console.log(err)
-//     }
-    
-
-    
-//   }
-
 exports.createCollection = async (req, res) => {
   console.log("in admin Controller");
   const { collectionName } = req.params;
@@ -125,6 +92,9 @@ exports.AddDataController = async (req, res) => {
   parser.write(fileBuffer);
   parser.end();
 }
+
+
+//@description: get all websites
 
 exports.findWebsites = async(req,res)=>{
   const result = await TrackCollectionModel.find({})

@@ -19,15 +19,26 @@ const Table = () => {
   const [noteAdded, setNoteAdded] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteRow, setDeleteRow] = useState(null);
+  const [website, setWebsite] = useState([])
 
   // Use useEffect to trigger handleNavbar when noteAdded changes
   useEffect(() => {
     if (noteAdded || !isDeleteModalOpen || !isModalOpen) {
       console.log("trigerred")
-      handleNavbar(selectedKey, selectedTable);
+      handleNavbar(selectedTable);
       setNoteAdded(false); 
     }
-  }, [noteAdded, selectedKey, selectedTable, isDeleteModalOpen, isModalOpen]);
+  }, [noteAdded, selectedTable, isDeleteModalOpen, isModalOpen]);
+
+  useEffect(() => {
+    axios.get("/admin/websites/")
+      .then((result) => {
+        setWebsite(result.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []); 
 
 
   //used to handle deleting row
@@ -79,25 +90,25 @@ const Table = () => {
 
   
 
-  const website = {
-    CT: "CTModel",
-    H4: "H4Model",
-    Can: "CanModel",
-    TH: "THModel",
-    TPlus: "TPlusModel",
-    FAO: "FAOModel",
-    FP: "FPModel",
-    SC: "SCModel",
-    TW: "TWModel",
-    VE: "VEModel"
-  };
+  // const website = {
+  //   CT: "CTModel",
+  //   H4: "H4Model",
+  //   Can: "CanModel",
+  //   TH: "THModel",
+  //   TPlus: "TPlusModel",
+  //   FAO: "FAOModel",
+  //   FP: "FPModel",
+  //   SC: "SCModel",
+  //   TW: "TWModel",
+  //   VE: "VEModel"
+  // };
 
 
-  const handleNavbar = (model, key) =>{
-    setSelectedKey(model)
-    setSelectedTable(key)
+  const handleNavbar = (table) =>{
+    // setSelectedKey(model)
+    setSelectedTable(table)
         axios
-            .get(`/check-links/get-links/${model}`)
+            .get(`/check-links/get-links/${table}`)
             .then((result) => {setUpdatedData(result.data)
             console.log(result.data)})
             .catch((err) => console.log(err));
@@ -143,13 +154,22 @@ const Table = () => {
     <div>
       <nav className="navbar d-flex justify-content-center align-items-center">
           <div className="button-wrapper"> 
-            {Object.keys(website).map((key) => (
+            {/* {Object.keys(website).map((key) => (
               <button
                 key={key}
                 className={`button ${selectedKey === key ? 'button-primary' : 'button-secondary'}`}
                 onClick={() => handleNavbar(website[key], key)}
               >
                 {key}
+              </button>
+            ))} */}
+            {website.map((value,key) => (
+              <button
+                key={key}
+                className={`button ${selectedKey === key ? 'button-primary' : 'button-secondary'}`}
+                onClick={() => handleNavbar(value.Website)}
+              >
+                {value.Website}
               </button>
             ))}
           </div>

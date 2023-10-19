@@ -17,19 +17,19 @@ const WebsiteModal = ({ websitesFound, website, handleSelect, show, onHide}) => 
             </tr>
           </thead>
           <tbody>
-            {website.map((websiteName, index) => {
-              const isPresent = websitesFound.includes(websiteName);
+            {website.map((value, key) => {
+              const isPresent = websitesFound.includes(value.Website);
               const textColorClass = isPresent ? 'text-success' : 'text-danger';
 
               return (
-                <tr key={index}>
-                  <td>{websiteName}</td>
+                <tr key={key}>
+                  <td>{value.Website}</td>
                   <td className={textColorClass}>{isPresent ? 'Present' : 'Not Present'}</td>
                   <td>
                     <button
                       className="btn btn-primary"
                       onClick={() => {
-                        handleSelect(websiteName);
+                        handleSelect(value.Website);
                       }}
                     >
                       Select

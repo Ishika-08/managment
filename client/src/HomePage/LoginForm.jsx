@@ -15,16 +15,35 @@ const LoginForm = () => {
     console.log("Email:", email);
     console.log("Password:", password);
 
-    axios.get(`/signup/${email}/${password}/`)
-    .then(result => {
-      console.log(result.data.message)
+  //   axios.get(`/signup/${email}/${password}/`)
+  //   .then(result => {
+  //     console.log(result.data.message)
+  //     setMessage(result.data.message);
+  //     if(result.data.message === true){
+  //       navigate(`/Home/`);
+  //     }
+  //   })
+  //   .catch(err => console.log(err))
+  // };
+
+  // axios.get(`/signup/${email}/${password}/`)
+  axios.get(`/signup/${email}/${password}/`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}` // Assuming the token is stored in localStorage
+    }
+  })
+  .then((result) => {
+    console.log(result.data);
+    if (result.data.token) {
+      localStorage.setItem("token", result.data.token); 
+      console.log(result.data.token)
+      navigate(`/Home/`);
+    } else {
       setMessage(result.data.message);
-      if(result.data.message === true){
-        navigate("/Home");
-      }
-    })
-    .catch(err => console.log(err))
-  };
+    }
+  })
+  .catch((err) => console.log(err));
+};
 
   return (
     <>

@@ -31,8 +31,8 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 
 //to get names of all the website tables
   useEffect(() => {
-    axios.get("/websites/")
-    .then(result => setWebsite(result.data.websiteNames))
+    axios.get("/admin/websites/")
+    .then(result => setWebsite(result.data))
     .catch(err => console.log(err));
   }, []); 
 

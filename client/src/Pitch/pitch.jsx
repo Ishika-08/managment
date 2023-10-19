@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,7 @@ const AddData = () => {
   const [emails, setEmails] = useState([]);
   const [showEmails, setShowEmails] = useState(false); 
   const [copySuccess, setCopySuccess] = useState(false);
+  const [mailboxOptions, setMailBoxOptions] = useState([])
 
   const navigate = useNavigate()
 
@@ -41,20 +42,29 @@ const AddData = () => {
   };
 
 
+  useEffect(() => {
+    axios.get("/admin/websites/")
+      .then((result) => {
+        setMailBoxOptions(result.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []); 
 
-  const mailboxOptions = [
-    { value: "", name: "---------" },
-    { value: "4H", name: "ellieben11@gmail.com" },
-    { value: "FAO", name: "breannethorne11@gmail.com" },
-    { value: "TW", name: "quinnwilde761@gmail.com" },
-    { value: "TH", name: "eziomontoya1@gmail.com" },
-    { value: "SC", name: "johnocampos121@gmail.com" },
-    { value: "T+", name: "katiespring83@gmail.com" },
-    { value: "CT", name: "synthiawright35@gmail.com    " },
-    { value: "VE", name: "siasmith21@gmail.com" },
-    { value: "FP", name: "maddisonparker2354@gmail.com " },
-    { value: "Can", name: "adelaideferrano364@gmail.com" },
-  ];
+  // const mailboxOptions = [
+  //   { value: "", name: "---------" },
+  //   { value: "4H", name: "ellieben11@gmail.com" },
+  //   { value: "FAO", name: "breannethorne11@gmail.com" },
+  //   { value: "TW", name: "quinnwilde761@gmail.com" },
+  //   { value: "TH", name: "eziomontoya1@gmail.com" },
+  //   { value: "SC", name: "johnocampos121@gmail.com" },
+  //   { value: "T+", name: "katiespring83@gmail.com" },
+  //   { value: "CT", name: "synthiawright35@gmail.com" },
+  //   { value: "VE", name: "siasmith21@gmail.com" },
+  //   { value: "FP", name: "maddisonparker2354@gmail.com " },
+  //   { value: "Can", name: "adelaideferrano364@gmail.com" },
+  // ];
 
   return (
       <div className="vh-100">
@@ -73,8 +83,8 @@ const AddData = () => {
                 onChange={(e) => setSite(e.target.value)}
               >
                 {mailboxOptions.map((option, index) => (
-                  <option key={index} value={option.value}>
-                    {option.value} : {option.name}
+                  <option key={index} value={option.Website}>
+                    {option.Website} : {option. MailBox}
                   </option>
                 ))}
               </select>

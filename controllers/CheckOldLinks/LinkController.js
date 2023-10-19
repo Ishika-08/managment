@@ -2,6 +2,7 @@ const { models} = require('../models');
  
 exports.getWebsiteData = async(req,res) =>{
   const {model} = req.params
+  console.log("tableName: " + model)
   // const websiteData = [];
   try{
     const result = await models.checkLinks.find({websiteName: model})
