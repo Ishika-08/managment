@@ -8,6 +8,7 @@ const ProtectedRoute = ({ element, path }) => {
     return <Navigate to="/" />;
   }
 
+  // Pass the 'element' prop in the Route component
   return <Route path={path} element={element} />;
 };
 

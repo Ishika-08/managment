@@ -3,7 +3,7 @@ import "./CSS/LoginForm.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
 
-const LoginForm = () => {
+const LoginForm = ({setIsAuthenticated}) => {
 
     const navigate = useNavigate()
 
@@ -27,19 +27,17 @@ const LoginForm = () => {
   // };
 
   // axios.get(`/signup/${email}/${password}/`)
-  axios.get(`/signup/${email}/${password}/`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}` // Assuming the token is stored in localStorage
-    }
-  })
+  axios.get(`/signup/${email}/${password}/`)
   .then((result) => {
     console.log(result.data);
     if (result.data.token) {
       localStorage.setItem("token", result.data.token); 
       console.log(result.data.token)
-      navigate(`/Home/`);
+      setIsAuthenticated(true)
+      navigate(`/Home`);
     } else {
       setMessage(result.data.message);
+      setIsAuthenticated(false)
     }
   })
   .catch((err) => console.log(err));

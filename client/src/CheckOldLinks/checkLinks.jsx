@@ -216,7 +216,8 @@ const Table = () => {
                 <tbody>
                   {updatedData.map((row) => (
                     <tr key={row._id}>
-                      <td>{row.websiteRow.Mailbox}</td>
+                    {console.log(row.websiteRow.MailBox, row.websiteRow)}
+                    <td>{row.websiteRow[' MailBox']}</td>
                       <td>{row.websiteRow.Email}</td>
                       <td>{row.websiteRow.DF}</td>
                       <td>{row.websiteRow.Topic}</td>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios"; // Axios is a popular library for making HTTP requests
+import { useNavigate } from "react-router-dom";
 
 function CSVFileUpload() {
   const [file, setFile] = useState(null);
@@ -7,6 +8,8 @@ function CSVFileUpload() {
   const [showFile, setShowFile] = useState(false)
   const [allWebsites, setAllWebsites] = useState([])
   const [message, setMessage] = useState("")
+  const navigate= useNavigate()
+
   
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -56,9 +59,17 @@ function CSVFileUpload() {
   setShowFile(true)
  }
 
+ const navigateToHome = () =>{
+  navigate("/Admin")
+}
+
+
   return (
     <div>
       {/* <h1 className="text-center mb-5">Upload a CSV File</h1> */}
+      <button className="btn m-5" onClick={navigateToHome}>
+              <i className="fas fa-arrow-left"></i> Back to Home
+    </button>
       <div className="container d-flex justify-content-center align-items-center mt-3" style = {{marginBottom: "5%"}}>
             <div className="row justify-content-center align-items-center">
             <tr>
