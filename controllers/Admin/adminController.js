@@ -101,3 +101,14 @@ exports.findWebsites = async(req,res)=>{
   res.json(result)
 }
 
+exports.deleteCollection = async (req, res) => {
+  const {collectionName} = req.params;
+  try {
+    const result = await TrackCollectionModel.findOneAndDelete({Website: collectionName})
+    console.log(result)
+    await mongoose.connection.db.dropCollection(collectionName);
+    res.status(200).json({ message: `Collection ${collectionName} deleted successfully.` });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+}

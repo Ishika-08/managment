@@ -32,7 +32,7 @@ const TableComponent = () => {
 
   const handleDelete = (id) => {
     console.log("in handleDelete" + id)
-    axios.delete(`/admin//delete/${id}`)
+    axios.delete(`/admin/delete/${id}`)
     .then(result =>{
         setMessage(result.data.message)
     })

@@ -12,5 +12,7 @@ router.post('/upload/:table', upload.single('csvFile'), adminController.AddDataC
 
 router.get("/websites", adminController.findWebsites)
 
+router.delete("/delete/:collectionName", adminController.deleteCollection)
+
 
 module.exports = router

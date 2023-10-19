@@ -8,6 +8,6 @@ const TrackCollectionsSchema = new mongoose.Schema({
     collection: "TrackCollection"
 });
 
-TrackCollectionModel = new mongoose.model("TrackCollection", TrackCollectionsSchema)
+const TrackCollectionModel = mongoose.model("TrackCollection", TrackCollectionsSchema);
 
-module.exports = TrackCollectionModel
+module.exports = TrackCollectionModel;
