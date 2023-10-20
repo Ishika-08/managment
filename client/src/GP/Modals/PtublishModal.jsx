@@ -11,6 +11,8 @@ const Publish = ({show, onClose, id , site}) => {
     DF: "",
     Email: "",
   });
+  const [siteDropdown, setSiteDropdown] = useState([]);
+
 
 
   const table = site?.toUpperCase();
@@ -29,6 +31,15 @@ const Publish = ({show, onClose, id , site}) => {
         console.log(result.data)
       })
       .catch(err => console.log(err));
+
+      axios.get("/admin/websites/")
+      .then((result) =>{
+        const websites = result.data.map((entry) => entry.Website);
+        setSiteDropdown([" ", ...websites]);
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
   }, [id]);
 
@@ -59,33 +70,45 @@ const Publish = ({show, onClose, id , site}) => {
         <Modal.Body>
           <form>
             {Object.keys(formData).map((key) => (
-
               <div className="mb-2" key={key}>
-              <label htmlFor={key}>{key}</label>
-              {key === "DF" ? (
-                <select
-                  name={key}
-                  className="form-control"
-                  onChange={handleChange}
-                  value={formData[key]}
-                >
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
-              ) : (
-                <input
-                  type="text"
-                  name={key}
-                  placeholder={`Enter ${key}`}
-                  className="form-control"
-                  onChange={handleChange}
-                  value={formData[key]}
-                />
-              )}
-            </div>
-
+                <label htmlFor={key}>{key}</label>
+                {key === "DF" ? (
+                  <select
+                    name={key}
+                    className="form-control"
+                    onChange={handleChange}
+                    value={formData[key]}
+                  >
+                    <option value=" "> </option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                ) : key === "Site" ? (
+                  <select
+                    name={key}
+                    className="form-control"
+                    onChange={handleChange}
+                    value={formData[key]}
+                  >
+                    {siteDropdown.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    name={key}
+                    placeholder={`Enter ${key}`}
+                    className="form-control"
+                    onChange={handleChange}
+                    value={formData[key]}
+                  />
+                )}
+              </div>
             ))}
-            </form>
+          </form>
         </Modal.Body>
 
         <Modal.Footer>
