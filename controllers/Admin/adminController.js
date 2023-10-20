@@ -1,6 +1,7 @@
 const getModelWithCollectionName = require("../../models/Website/Website"); 
 const TrackCollectionModel = require("../../models/Admin/TrackCollections");
 const DatabaseModel = require("../../models/Database");
+const ExtraContentsModel = require("../../models/Content/ExtraContent")
 
 const csv = require('csv-parser');
 const ContentsModel = require('../../models/Content/Contents');
@@ -57,7 +58,11 @@ exports.AddDataController = async (req, res) => {
   let model;
   if(table === "Databases"){
     model = DatabaseModel;
-  }else{
+  }
+  else if(table === "ExtraContents"){
+    model = ExtraContentsModel;
+  }
+  else{
   model = getModelWithCollectionName(table);
   }
 

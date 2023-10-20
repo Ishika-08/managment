@@ -59,6 +59,12 @@ function CSVFileUpload() {
   setShowFile(true)
  }
 
+ const handleTopics = ()=>{
+  setTable("ExtraContents")
+  setAllWebsites([])
+  setShowFile(true)
+ }
+
  const navigateToHome = () =>{
   navigate("/Admin")
 }
@@ -95,7 +101,7 @@ function CSVFileUpload() {
 
 
       <div className="container d-flex justify-content-center align-items-center">
-            <div className="row justify-content-center align-items-center">
+            <div className="row justify-content-center align-items-center mb-5">
             <tr>
             <div  className="w-100">
             <a href={`/websiteExample.csv`} download>
@@ -113,12 +119,22 @@ function CSVFileUpload() {
               </button>
             </a>
           </div>
+          <div  className="w-100">
+            <a href={`/TopicsExample.csv`} download>
+              <button className="btn btn-success btn-lg mb-4">
+                <i className="fas fa-download"></i> Download Topics Example
+              </button>
+            </a>
+          </div>
             </tr>
                 <tr>
                 <button className="w-100 btn btn-primary btn-lg mb-4" onClick = {() => handleWebsite()}>Add data to Website Table</button>
                 </tr>
                 <tr>
                 <button className="w-100 btn btn-secondary btn-lg mb-4" onClick = {() => handleDatabase()}>Add Data to Database table</button>
+                </tr>
+                <tr>
+                <button className="w-100 btn btn-warning btn-lg mb-4" onClick = {() => handleTopics()}>Add Data to ExtraContents table</button>
                 </tr>
 
                 <tr>
@@ -154,12 +170,12 @@ function CSVFileUpload() {
                 type="file"
                 accept=".csv"
                 onChange={handleFileChange}
-                className=""
+                className="my-3"
               />
               <button onClick={handleFileUpload}>Upload</button>
               </div>)}
-                        </tr>
-                    </div>
+              </tr>
+              </div>
               </div>
               {message !== "" && <h2 className="text-center m-5">{message}</h2>}
      
