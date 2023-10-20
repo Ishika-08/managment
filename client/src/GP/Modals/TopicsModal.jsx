@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button, Table } from "react-bootstrap";
 
-const Topics = ({ site, id, showModal, closeModal, handleChange, setSelectedIds}) => {
+const Topics = ({ site, id, showModal, closeModal, handleChange, setSelectedIds, handleTopicsSuccess}) => {
   const [content, setContent] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [copiedTitles, setCopiedTitles] = useState("");
@@ -58,12 +58,14 @@ const Topics = ({ site, id, showModal, closeModal, handleChange, setSelectedIds}
           prevContent.filter((item) => item._id !== row._id)
         );
         handleChange();
-        closeModal();
-        setSelectedIds([]);
       })
       .catch((error) => {
         console.error("Delete request error:", error);
       });
+
+      handleTopicsSuccess(id)
+      // setSelectedIds([]);
+      closeModal();
   };
 
   return (

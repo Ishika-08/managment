@@ -33,13 +33,7 @@ function Home() {
   const handleUpdateShow = () => {
     setShowUpdateModal(true);
   }
-  const handleUpdate = () =>{
-    if(selectedIds.length === 1){
-      handleUpdateShow()
-    }else{
-      console.log("selectedIds.length = " + selectedIds.length)
-    }
-  }
+ 
 
   //get all data from contents table
   const handleShowAll = () => {
@@ -88,9 +82,9 @@ function Home() {
 
 //to rerender the table when site is added using suggest site button
 const handleChange = ()=>{
-  console.log("triggered")
-  setShowAll(false)
-  setChangeContent(true)
+  // console.log("triggered")
+  // setShowAll(false)
+  // setChangeContent(true)
 }
 
 //to store the selected ids and work with them
@@ -135,6 +129,19 @@ const handleCheckboxChange = (event, contentId, status, site) => {
       
 
     //for topics modal
+    const fetchUpdatedContent = (id) => {
+      axios.get(`/content/update/${id}`)
+        .then((response) => {
+          const updatedItem = response.data;
+          setContent(prevContent =>
+            prevContent.map(item => (item._id === id ? updatedItem : item))
+          );
+        })
+        .catch((error) => {
+          console.error('Fetch updated content error:', error);
+        });
+    };
+    
     const openTopicModal = () => {
       setShowTopicModal(true)
 
@@ -145,18 +152,36 @@ const handleCheckboxChange = (event, contentId, status, site) => {
     };
 
     const handleTopics = () => {
-        if(selectedIds.length === 1){
-          openTopicModal()
-        }
-    }
+      if (selectedIds.length === 1) {
+        openTopicModal();
+      }
+    };
+
+    const handleTopicsSuccess = (id) => {
+      fetchUpdatedContent(id);
+    };
  
     //to handle search results
     useEffect(() => {
         setContent(searchResults);
       }, [searchResults]);
-       //used to navigate to home page
+       
 
+  //to handle update modal changes
 
+  const handleUpdate = () => {
+    if (selectedIds.length === 1) {
+      handleUpdateShow();
+    } else {
+      console.log("selectedIds.length = " + selectedIds.length);
+    }
+  };
+
+  const handleUpdateSuccess = (id) => {
+    fetchUpdatedContent(id);
+  };
+
+ //used to navigate to home page
   const navigateToHome = () => {
     navigate("/Home")
   };
@@ -185,7 +210,12 @@ const handleCheckboxChange = (event, contentId, status, site) => {
                     <Button variant="success" className = "btn btn-lg" onClick={handleUpdate}>
                       Update
                     </Button>
-                      <UpdateModal show={showUpdateModal} handleClose={handleUpdateClose} id={selectedIds[0]}/>                   
+                      <UpdateModal
+                        show={showUpdateModal}
+                        handleClose={handleUpdateClose}
+                        id={selectedIds[0]}
+                        handleUpdateSuccess={handleUpdateSuccess}
+                      />
                      </div>
 
 
@@ -202,13 +232,22 @@ const handleCheckboxChange = (event, contentId, status, site) => {
                     >
                         Topics
                     </button>
-                    <Topic 
+                    {/* <Topic 
                     site={site} 
                     id={selectedIds[0]} 
                     showModal={showTopicModal} 
                     closeModal={closeTopicModal} 
                     handleChange={handleChange}
                     setSelectedIds = { setSelectedIds}
+                    /> */}
+                    <Topic
+                      site={site}
+                      id={selectedIds[0]}
+                      showModal={showTopicModal}
+                      closeModal={closeTopicModal}
+                      handleChange={handleChange}
+                      setSelectedIds={setSelectedIds}
+                      handleTopicsSuccess={handleTopicsSuccess}
                     />
                     </div>
 

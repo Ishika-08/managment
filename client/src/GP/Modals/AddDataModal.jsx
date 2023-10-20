@@ -113,11 +113,15 @@ function CreateUser({ show, handleClose }){
                             <option value = "">---------</option>
 
                             {mailboxOptions.map((element, index) => {
-                            return (
-                            <option key={index} value={element.Website}>
-                                {element.Website}
-                            </option>
+                                if(element.Website === "TPlus"){
+                                    return(<option value="T+">T+</option>)
+                                }else{
+                                    return (
+                                    <option key={index} value={element.Website}>
+                                        {element.Website}
+                                    </option>
                             );
+                                }
                         })}
                         </select>
                      </div>
