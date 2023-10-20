@@ -52,7 +52,7 @@ const TableComponent = () => {
               <i className="fas fa-arrow-left"></i> Back to Home
     </button>
 
-    <h1 className="text-center m-3">Website Table Management</h1>
+    {/* <h1 className="text-center m-3">Website Table Management</h1> */}
     <button className="btn btn-primary btn-lg mx-5 my-3" onClick={() => handleShow()}>
           Create Table
      </button>
