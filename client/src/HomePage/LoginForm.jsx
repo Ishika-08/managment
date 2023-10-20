@@ -12,27 +12,10 @@ const LoginForm = ({setIsAuthenticated}) => {
   const [message, setMessage] = useState("");
 
   const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
-
-  //   axios.get(`/signup/${email}/${password}/`)
-  //   .then(result => {
-  //     console.log(result.data.message)
-  //     setMessage(result.data.message);
-  //     if(result.data.message === true){
-  //       navigate(`/Home/`);
-  //     }
-  //   })
-  //   .catch(err => console.log(err))
-  // };
-
-  // axios.get(`/signup/${email}/${password}/`)
   axios.get(`/signup/${email}/${password}/`)
   .then((result) => {
-    console.log(result.data);
     if (result.data.token) {
       localStorage.setItem("token", result.data.token); 
-      console.log(result.data.token)
       setIsAuthenticated(true)
       navigate(`/Home`);
     } else {
