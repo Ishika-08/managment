@@ -1,23 +1,32 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom"
 import axios from "axios"
 import WebsiteModal from "./Modals/SuggestSiteModal";
 import Publish from "./Modals/PtublishModal"
 
 
-function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowStatus, handleChange }) {
+function SearchTable({ content, handleCheckboxChange, selectedIds, handleChange }) {
   const [domain, setDomain] = useState()
   const [websitesFound, setWebsitesFound] = useState([])
   const [website, setWebsite] = useState([])
   const [showWebsiteModal, setShowWebsiteModal] = useState(false);
   const [updateSiteId, setUpdateSiteId] = useState()
-  const [searchContent, setSearchContent] = useState(content); 
+  // const [searchContent, setSearchContent] = useState(content); 
+  const [searchContent, setSearchContent] = useState([]); 
 
   
+  // useEffect(() => {
+  //   if(content!== undefined)
+  //   setSearchContent(content);
+  // }, [content, setShowWebsiteModal]);
   useEffect(() => {
-    setSearchContent(content);
+    if (content !== undefined && Array.isArray(content)) {
+      setSearchContent(content);
+    }
   }, [content, setShowWebsiteModal]);
   
+  useEffect(() =>{
+    console.log(searchContent, Array.isArray(searchContent))
+  }, [searchContent])
 
 //to find all the websites which contain the domain on clicking suggest site
   useEffect(() => {
@@ -39,7 +48,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 
 //used for suggest site button get domain
   const handleSite = (Email, id) => {
-    console.log("in handleSite" + Email)
+    // console.log("in handleSite" + Email)
     setUpdateSiteId(id);
     axios.get("/database/" + Email)
       .then(result => {
@@ -60,7 +69,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
     const handleSelect = (websiteName) =>{
     axios.put('/content/update/contents/' + updateSiteId, {...content, Site: websiteName})
    .then(result =>{
-    console.log(result)
+    // console.log(result)
     handleChange()
   })
    .catch(err => console.log(err))
@@ -72,7 +81,7 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, selectedRowSt
 const [publishContent, setPublishContent] = useState({ id: null, site: null, showPublish: false });
 const openPublishForEntry = (id, site) => {
   setPublishContent({ id, site, showPublish: true });
-  console.log(publishContent)
+  // console.log(publishContent)
 };
 const closePublishForEntry = () => {
   setPublishContent({ ...publishContent, showPublish: false });
@@ -96,7 +105,7 @@ const closePublishForEntry = () => {
                   <col style={{ width: '9%' }} />
                   <col style={{ width: '10%' }} />
                 </colgroup>
-                <thead>
+                <thead style={{ position: 'sticky', top: 0, zIndex: 1, background: 'white' }}>
                   <tr>
                     <th scope="col" className="col-1">Select</th>
                     <th scope="col" className="col-1">Mailbox</th>
@@ -111,17 +120,33 @@ const closePublishForEntry = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {searchContent.map((content, index) => {
+                {console.log("isArray" + Array.isArray(searchContent))}
+                    {Array.isArray(searchContent) && searchContent.map((content, index) => {
                     const rowNumber = index + 1;
+                    const {
+                      _id,
+                      Mailboxes,
+                      DocsURL,
+                      Title,
+                      Email,
+                      Status,
+                      Site,
+                      Requirements,
+                      DF,
+                    } = content;
+
                     return (
-                      <tr key={content._id} scope="row">
+                      <tr key={_id} scope="row">
                         <td style={{ maxWidth: '100px' }}>
                           <div className="custom-control custom-checkbox">
                             <input
                               type="checkbox"
                               className="custom-control-input"
                               onChange={(event) => {
-                                handleCheckboxChange(event, content._id, content.Status, content.Site);
+                                const site = Site === undefined ? "None" : Site;
+                                  const status = Status === undefined? "None" : Status
+                                  handleCheckboxChange(event, content._id, status, site);
+                                  console.log("done")
                               }}
                             />
                             <label className="custom-control-label" htmlFor="customCheck1">
@@ -130,23 +155,23 @@ const closePublishForEntry = () => {
                             </label>
                           </div>
                         </td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Mailboxes}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}> {Mailboxes || ' '}</td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
                         <a href={content.DocsURL} target="_blank" rel="noopener noreferrer">
-                          {content.DocsURL}
+                        {DocsURL || ' '}
                         </a>
                       </td>
-                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Title}</td>
-                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Email}</td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Status}</td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.Site}</td>
-                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{content.Requirements}</td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{content.DF}</td>
-                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{Title || ' '}</td>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}> {Email || ' '}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{Status || ' '}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{Site || ' '}</td>
+                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{Requirements || " "}</td>
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{DF || " "}</td>
+                        {/* <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
                           {content?.Status?.toLowerCase().includes("sent") && (
                             <button
                               className="btn btn-success"
-                              onClick={() => openPublishForEntry(content._id, content.Site)}
+                              onClick={() => openPublishForEntry(content._id, (Site || " " ))}
                             >
                               Publish
                             </button>
@@ -160,6 +185,25 @@ const closePublishForEntry = () => {
                               Suggest Site
                             </button>
                           )}
+                        </td> */}
+                        <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
+                          {Status?.toLowerCase().includes('sent') && (
+                            <button
+                              className="btn btn-success"
+                              onClick={() => openPublishForEntry(_id, Site)}
+                            >
+                              Publish
+                            </button>
+                          )}
+
+                          {(Site === undefined || Site === '') && (
+                            <button
+                              className="btn btn-success"
+                              onClick={() => handleSite(Email, _id)}
+                            >
+                              Suggest Site
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
@@ -167,7 +211,7 @@ const closePublishForEntry = () => {
                 </tbody>
               </table>
             </div>
-</section>
+      </section>
 
       <WebsiteModal
         websitesFound={websitesFound}

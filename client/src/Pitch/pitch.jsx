@@ -16,16 +16,20 @@ const AddData = () => {
     navigate("/Home")
   };
 
+
   const handleChange = (e) => {
     e.preventDefault();
-    console.log("Selected site:", site);
-    axios
+    if(site !== "--"){
+      axios
       .get("/track/copyEmails/" + site)
       .then((result) => {
         setEmails(result.data.eArray);
         setShowEmails(true); 
       })
       .catch((err) => console.log(err));
+    }else{
+      setEmails(["No emails found"])
+    }
   };
 
   const handleCopy = () => {
@@ -52,20 +56,6 @@ const AddData = () => {
       });
   }, []); 
 
-  // const mailboxOptions = [
-  //   { value: "", name: "---------" },
-  //   { value: "4H", name: "ellieben11@gmail.com" },
-  //   { value: "FAO", name: "breannethorne11@gmail.com" },
-  //   { value: "TW", name: "quinnwilde761@gmail.com" },
-  //   { value: "TH", name: "eziomontoya1@gmail.com" },
-  //   { value: "SC", name: "johnocampos121@gmail.com" },
-  //   { value: "T+", name: "katiespring83@gmail.com" },
-  //   { value: "CT", name: "synthiawright35@gmail.com" },
-  //   { value: "VE", name: "siasmith21@gmail.com" },
-  //   { value: "FP", name: "maddisonparker2354@gmail.com " },
-  //   { value: "Can", name: "adelaideferrano364@gmail.com" },
-  // ];
-
   return (
       <div className="vh-100">
         <button className="btn m-3" onClick={navigateToHome}>
@@ -82,6 +72,7 @@ const AddData = () => {
                 aria-hidden="true"
                 onChange={(e) => setSite(e.target.value)}
               >
+                <option value= "--">--</option>
                 {mailboxOptions.map((option, index) => (
                   <option key={index} value={option.Website}>
                     {option.Website} : {option. MailBox}
@@ -102,18 +93,18 @@ const AddData = () => {
           <div className="text-center mb-4">
             <h3>Emails:</h3>
             <button className="btn btn-primary mx-2" onClick={handleCopy}>
-              Copy Selected Titles
+              Copy Selected Emails
             </button>
             {copySuccess && <div className="text-success h3">Emails copied successfully!</div>}
           </div>
           <div className="list-group">
-            {emails.map((email, index) => (
+            {emails !== undefined && (emails.map((email, index) => (
               <div className="list-group-item d-flex justify-content-center align-items-center" key={index}>
                 <span className="text-center">
                   {email}
                 </span>
               </div>
-            ))}
+      )))}
           </div>
         </div>
       )}

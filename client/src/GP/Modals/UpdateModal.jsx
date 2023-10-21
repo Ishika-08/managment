@@ -89,7 +89,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Mailboxes'
                 type='text'
-                placeholder='Enter Name'
+                placeholder='Enter Mailbox'
                 value={formData.Mailboxes || ""}
                 onChange={(e) => handleChange('Mailboxes', e.target.value)}
               />
@@ -97,7 +97,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Docs URL'
                 type='text'
-                placeholder='Enter Name'
+                placeholder='Enter Docs URL'
                 value={formData.DocsURL || ""}
                 onChange={(e) => handleChange('DocsURL', e.target.value)}
               />
@@ -105,7 +105,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Title'
                 type='text'
-                placeholder='Enter Name'
+                placeholder='Enter Title'
                 value={formData.Title || ""}
                 onChange={(e) => handleChange('Title', e.target.value)}
               />
@@ -113,7 +113,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Email ID'
                 type='email'
-                placeholder='Enter Name'
+                placeholder='Enter Email'
                 value={formData.Email || ""}
                 onChange={(e) => handleChange('Email', e.target.value)}
               />
@@ -121,7 +121,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Status'
                 type='text'
-                placeholder='Enter Name'
+                placeholder='Enter Status'
                 value={formData.Status || ""}
                 onChange={(e) => handleChange('Status', e.target.value)}
               />
@@ -136,7 +136,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
               <InputField
                 label='Requirements'
                 type='text'
-                placeholder='Enter Name'
+                placeholder='Enter Requirements'
                 value={formData.Requirements || ""}
                 onChange={(e) => handleChange('Requirements', e.target.value)}
               />

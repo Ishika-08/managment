@@ -22,6 +22,8 @@ function Home() {
 
   const navigate= useNavigate()
 
+
+
   //to handle AddData button Modal
   const [showAddForm, setAddForm] = useState(false)
   const handleCloseAddFormModal = () => setAddForm(false);
@@ -89,12 +91,15 @@ const handleChange = ()=>{
 
 //to store the selected ids and work with them
 const handleCheckboxChange = (event, contentId, status, site) => {
-  console.log(status)
+  console.log("in handle checkboxchange")
+  console.log(event, contentId, status, site)
     if (event.target.checked) {
-      setSite(site);
+      status === undefined ? setSelectedRowStatus(" "):setSelectedRowStatus(status);
+      site === undefined ? setSite(" "):setSite(site);
       setSelectedIds((prev) => [...prev, contentId]);
-      setSelectedRowStatus(status);
-    } else {
+    } 
+    
+    else {
       const updatedSelectedIds = selectedIds.filter(id => id !== contentId);
       setSelectedIds(updatedSelectedIds);
       // setShowTopics(false);
@@ -103,6 +108,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
         setSelectedRowStatus("");
       }
     }
+    console.log("at the end of handlecheckboxchange")
   };
   
       
@@ -117,7 +123,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
         axios
           .delete('/content/delete/' + table, { data: { ids: selectedIds } })
           .then((response) => {
-            console.log(response.data); 
+            // console.log(response.data); 
             setContent((prevContent) =>
               prevContent.filter((item) => !selectedIds.includes(item._id))
             );
@@ -141,7 +147,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
           console.error('Fetch updated content error:', error);
         });
     };
-    
+
     const openTopicModal = () => {
       setShowTopicModal(true)
 
@@ -173,7 +179,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
     if (selectedIds.length === 1) {
       handleUpdateShow();
     } else {
-      console.log("selectedIds.length = " + selectedIds.length);
+      // console.log("selectedIds.length = " + selectedIds.length);
     }
   };
 
@@ -228,18 +234,11 @@ const handleCheckboxChange = (event, contentId, status, site) => {
                     <button
                         className="btn btn-info btn-lg"
                         onClick={handleTopics}
-                        disabled={(selectedIds.length) !== 1  || !selectedRowStatus.toLowerCase().includes("pending")}
+                        disabled={(selectedIds.length) !== 1  || !selectedRowStatus?.toLowerCase()?.includes("pending")}
                     >
                         Topics
                     </button>
-                    {/* <Topic 
-                    site={site} 
-                    id={selectedIds[0]} 
-                    showModal={showTopicModal} 
-                    closeModal={closeTopicModal} 
-                    handleChange={handleChange}
-                    setSelectedIds = { setSelectedIds}
-                    /> */}
+                    
                     <Topic
                       site={site}
                       id={selectedIds[0]}
@@ -288,7 +287,6 @@ const handleCheckboxChange = (event, contentId, status, site) => {
                   content={content}
                   handleCheckboxChange={handleCheckboxChange}
                   selectedIds={selectedIds}
-                  selectedRowStatus={selectedRowStatus}
                   handleChange = {handleChange}
                 />
 

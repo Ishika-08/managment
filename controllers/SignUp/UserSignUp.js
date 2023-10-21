@@ -36,9 +36,9 @@ exports.UserSignUp = async (req, res) => {
             const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' }); 
             res.json({ token: token, message: true });
         } else {
-            res.status(401).json({ message: "Username or password is invalid" });
+            res.json({ message: "Username or password is invalid" });
         }
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res.json({ message: "Internal server error" });
     }
 };

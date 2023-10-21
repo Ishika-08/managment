@@ -5,14 +5,14 @@ import { useNavigate} from 'react-router-dom'
 
 function CreateUser({ show, handleClose }){
     //for contents table
-    const [Mailboxes, setMailBox] = useState("")
-    const [DocsURL, setDocsUrl] = useState("")
-    const [Title, setTitle] = useState("")
-    const [Email, setEmailId] = useState("")
-    const [Status, setStatus] = useState("")
-    const [Site, setSite] = useState("")
-    const [Requirements, setRequirement] = useState("")
-    const [DF, setDF] = useState("")
+    const [Mailboxes, setMailBox] = useState()
+    const [DocsURL, setDocsUrl] = useState()
+    const [Title, setTitle] = useState()
+    const [Email, setEmailId] = useState()
+    const [Status, setStatus] = useState()
+    const [Site, setSite] = useState()
+    const [Requirements, setRequirement] = useState()
+    const [DF, setDF] = useState()
     const [mailboxOptions, setmailBoxOptions] = useState([])
 
 
@@ -72,19 +72,19 @@ function CreateUser({ show, handleClose }){
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Docs URL</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
+                         <input type='text' placeholder='Enter Docs URL' className='form-control'
                              onChange =  {(e) => setDocsUrl(e.target.value)}
                          />
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Title</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
+                         <input type='text' placeholder='Enter Title' className='form-control'
                              onChange =  {(e) => setTitle(e.target.value)}
                          />
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Email ID</label>
-                         <input type='email' placeholder='Enter Name' className='form-control'
+                         <input type='email' placeholder='Enter Email' className='form-control'
                              onChange =  {(e) => setEmailId(e.target.value)}
                          />
                      </div>
@@ -127,7 +127,7 @@ function CreateUser({ show, handleClose }){
                      </div>
                      <div className='mb-2'>
                          <label htmlFor=''>Requirements</label>
-                         <input type='text' placeholder='Enter Name' className='form-control'
+                         <input type='text' placeholder='Enter Requirements' className='form-control'
                              onChange =  {(e) => setRequirement(e.target.value)}
                          />
                      </div>
