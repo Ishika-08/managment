@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"
+import DeleteModal from "./DeleteModal";
 import CreateTableModal from "./components/createTableModal"
 import { useNavigate } from "react-router-dom";
 
@@ -8,8 +9,19 @@ const TableComponent = () => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState("")
   const [show, setShow] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteWebsite, setDeleteWebsite] = useState()
   const navigate= useNavigate()
 
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteWebsite()
+  };
+
+  const handleShowDeleteModal = (website) =>{
+    setIsDeleteModalOpen(true)
+    setDeleteWebsite(website)
+  }
 
   useEffect(()=>{
     axios.get("/admin/websites/")
@@ -30,11 +42,12 @@ const TableComponent = () => {
     setShow(false);
   };
 
-  const handleDelete = (id) => {
-    console.log("in handleDelete" + id)
-    axios.delete(`/admin/delete/${id}`)
+  const handleDelete = () => {
+    console.log("in handleDelete" + deleteWebsite)
+    axios.delete(`/admin/delete/${deleteWebsite}`)
     .then(result =>{
         setMessage(result.data.message)
+        alert(result.data.message)
     })
     .catch((err) =>{
         console.log(err)
@@ -83,7 +96,7 @@ const TableComponent = () => {
                       <h5>{value.Website}</h5>
                     </td>
                     <td>
-                      <button className="btn btn-lg btn-danger" onClick={() => handleDelete(value.Website)}>
+                      <button className="btn btn-lg btn-danger" onClick={() =>handleShowDeleteModal(value.Website)}>
                         Delete
                       </button>
                     </td>
@@ -93,7 +106,11 @@ const TableComponent = () => {
             </tbody>
           </table>
         </div>
-
+        <DeleteModal
+        show={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onDelete={handleDelete}
+      />
         <CreateTableModal show={show} handleClose={handleClose} setMessageCallback={setMessage} />
       </section>
       </div>

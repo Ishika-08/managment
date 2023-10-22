@@ -91,8 +91,6 @@ const handleChange = ()=>{
 
 //to store the selected ids and work with them
 const handleCheckboxChange = (event, contentId, status, site) => {
-  console.log("in handle checkboxchange")
-  console.log(event, contentId, status, site)
     if (event.target.checked) {
       status === undefined ? setSelectedRowStatus(" "):setSelectedRowStatus(status);
       site === undefined ? setSite(" "):setSite(site);
@@ -108,7 +106,6 @@ const handleCheckboxChange = (event, contentId, status, site) => {
         setSelectedRowStatus("");
       }
     }
-    console.log("at the end of handlecheckboxchange")
   };
   
       
@@ -127,6 +124,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
             setContent((prevContent) =>
               prevContent.filter((item) => !selectedIds.includes(item._id))
             );
+            setSelectedIds([])
           })
           .catch((error) => {
             console.error('Delete request error:', error);

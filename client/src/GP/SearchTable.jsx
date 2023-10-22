@@ -10,23 +10,17 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, handleChange 
   const [website, setWebsite] = useState([])
   const [showWebsiteModal, setShowWebsiteModal] = useState(false);
   const [updateSiteId, setUpdateSiteId] = useState()
-  // const [searchContent, setSearchContent] = useState(content); 
   const [searchContent, setSearchContent] = useState([]); 
 
   
-  // useEffect(() => {
-  //   if(content!== undefined)
-  //   setSearchContent(content);
-  // }, [content, setShowWebsiteModal]);
+  
   useEffect(() => {
     if (content !== undefined && Array.isArray(content)) {
       setSearchContent(content);
     }
   }, [content, setShowWebsiteModal]);
   
-  useEffect(() =>{
-    console.log(searchContent, Array.isArray(searchContent))
-  }, [searchContent])
+  
 
 //to find all the websites which contain the domain on clicking suggest site
   useEffect(() => {
@@ -120,7 +114,6 @@ const closePublishForEntry = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {console.log("isArray" + Array.isArray(searchContent))}
                     {Array.isArray(searchContent) && searchContent.map((content, index) => {
                     const rowNumber = index + 1;
                     const {
@@ -146,7 +139,6 @@ const closePublishForEntry = () => {
                                 const site = Site === undefined ? "None" : Site;
                                   const status = Status === undefined? "None" : Status
                                   handleCheckboxChange(event, content._id, status, site);
-                                  console.log("done")
                               }}
                             />
                             <label className="custom-control-label" htmlFor="customCheck1">
@@ -167,25 +159,6 @@ const closePublishForEntry = () => {
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{Site || ' '}</td>
                         <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{Requirements || " "}</td>
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>{DF || " "}</td>
-                        {/* <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
-                          {content?.Status?.toLowerCase().includes("sent") && (
-                            <button
-                              className="btn btn-success"
-                              onClick={() => openPublishForEntry(content._id, (Site || " " ))}
-                            >
-                              Publish
-                            </button>
-                          )}
-
-                          {(content.Site === undefined || content.Site === '') && (
-                            <button
-                              className="btn btn-success"
-                              onClick={() => handleSite(content.Email, content._id)}
-                            >
-                              Suggest Site
-                            </button>
-                          )}
-                        </td> */}
                         <td style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
                           {Status?.toLowerCase().includes('sent') && (
                             <button
