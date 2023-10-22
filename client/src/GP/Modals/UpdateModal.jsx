@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { Modal, Button } from 'react-bootstrap';
 
-const site = [];
 
 function InputField({ label, type, placeholder, value, onChange, options}) {
   if (options) {
@@ -41,6 +40,7 @@ function InputField({ label, type, placeholder, value, onChange, options}) {
 function Update({ show, handleClose, id, handleUpdateSuccess }) {
   const [formData, setFormData] = useState({});
   const [site, setSite] = useState([]);
+  const [Mailbox, setMailbox] = useState([])
 
   useEffect(() => {
     axios.get('/content/update/' + id)
@@ -52,8 +52,10 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
 
       axios.get("/admin/websites/")
       .then((result) =>{
+        const Mailbox = result.data.map((entry) => entry.MailBox);
         const websites = result.data.map((entry) => entry.Website);
         setSite([" ", ...websites]);
+        setMailbox([" ", ...Mailbox]);
       })
       .catch(err => {
         console.log(err)
@@ -92,6 +94,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 placeholder='Enter Mailbox'
                 value={formData.Mailboxes || ""}
                 onChange={(e) => handleChange('Mailboxes', e.target.value)}
+                options={Mailbox}
               />
 
               <InputField
@@ -124,6 +127,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 placeholder='Enter Status'
                 value={formData.Status || ""}
                 onChange={(e) => handleChange('Status', e.target.value)}
+                options={[" ", "sent", "pending", "Link Added"]}
               />
 
               <InputField

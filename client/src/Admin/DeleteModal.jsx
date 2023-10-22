@@ -6,7 +6,6 @@ const DeleteModal = ({ show, onClose, onDelete }) => {
 
     const handleConfirmDelete = () => {
         onDelete();
-        onClose()
       };
 
     return (

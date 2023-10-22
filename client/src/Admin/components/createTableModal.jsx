@@ -3,8 +3,8 @@ import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 
 function MyModal({ show, handleClose, setMessageCallback}) {
-  const [website, setWebsite] = useState("");
-  const [MailBox, setMailbox] = useState("");
+  const [website, setWebsite] = useState();
+  const [MailBox, setMailbox] = useState();
 
   const handleWebsiteChange = (e) => {
     setWebsite(e.target.value);
@@ -19,15 +19,14 @@ function MyModal({ show, handleClose, setMessageCallback}) {
     axios.post(`/admin/${website}`, {MailBox})
     .then((response) => {
         setMessageCallback(response.data.message);
+        alert(response.data.message)
+        handleClose()
     })
     .catch((error) => {
         setMessageCallback(error.response.data.error);
+        alert(error.response.data.error)
+        handleClose()
     })
-    handleClose()
-    // if (website && mailbox) {
-    //   addCollection(website, mailbox);
-    //   handleClose();
-    // }
   };
 
   return (

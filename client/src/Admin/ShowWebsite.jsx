@@ -32,7 +32,7 @@ const TableComponent = () => {
     .catch(err => {
       console.log(err)
     })
-  }, [message])
+  }, [show,isDeleteModalOpen, message])
 
   const handleShow = () => {
     setShow(true);
@@ -43,11 +43,11 @@ const TableComponent = () => {
   };
 
   const handleDelete = () => {
-    console.log("in handleDelete" + deleteWebsite)
     axios.delete(`/admin/delete/${deleteWebsite}`)
     .then(result =>{
         setMessage(result.data.message)
         alert(result.data.message)
+        handleCloseDeleteModal()
     })
     .catch((err) =>{
         console.log(err)

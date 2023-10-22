@@ -8,7 +8,6 @@ const ContentsModel = require('../../models/Content/Contents');
 const mongoose = require("mongoose")
 
 exports.createCollection = async (req, res) => {
-  console.log("in admin Controller");
   const { collectionName } = req.params;
   const { MailBox } = req.body;
 
@@ -36,9 +35,8 @@ exports.createCollection = async (req, res) => {
       res.status(201).json({ message: "Collection created successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to create collection" });
+      res.json({ error: "Failed to create collection" });
     }
-    console.log(result);
   } catch (err) {
     console.log(err);
   }
@@ -48,7 +46,6 @@ exports.createCollection = async (req, res) => {
 exports.AddDataController = async (req, res) => {
   const {table} = req.params;
 
-  console.log("In Add data controller");
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -70,13 +67,9 @@ exports.AddDataController = async (req, res) => {
 
   parser.on('data', (data) => {
     results.push(data);
-    console.log("CSV data:", data);
   });
 
   parser.on('end', () => {
-    // console.log("Parsing complete");
-    // console.log("Parsed data:", results);
-
 
     model.insertMany(results)
       .then(() => {
@@ -107,13 +100,17 @@ exports.findWebsites = async(req,res)=>{
 }
 
 exports.deleteCollection = async (req, res) => {
-  const {collectionName} = req.params;
+  const { collectionName } = req.params;
   try {
-    const result = await TrackCollectionModel.findOneAndDelete({Website: collectionName})
-    console.log(result)
+    const result = await TrackCollectionModel.findOneAndDelete({ Website: collectionName });
+    if (!result) {
+      return res.status(404).json({ message: 'Collection not found.' });
+    }
+
     await mongoose.connection.db.dropCollection(collectionName);
     res.status(200).json({ message: `Collection ${collectionName} deleted successfully.` });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Internal server error.' });
   }
-}
+};
