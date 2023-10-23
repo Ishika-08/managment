@@ -4,7 +4,7 @@ import WebsiteModal from "./Modals/SuggestSiteModal";
 import Publish from "./Modals/PtublishModal"
 
 
-function SearchTable({ content, handleCheckboxChange, selectedIds, handleChange }) {
+function SearchTable({ content, handleCheckboxChange, selectedIds, handleChange, fetchUpdatedContent }) {
   const [domain, setDomain] = useState()
   const [websitesFound, setWebsitesFound] = useState([])
   const [website, setWebsite] = useState([])
@@ -58,14 +58,12 @@ function SearchTable({ content, handleCheckboxChange, selectedIds, handleChange 
       .catch(err => console.log(err));
       setShowWebsiteModal(true);
   }
-  
-//used for updating site name in contents table and rerendering table
+
     const handleSelect = (websiteName) =>{
     axios.put('/content/update/contents/' + updateSiteId, {...content, Site: websiteName})
    .then(result =>{
-    // console.log(result)
-    handleChange()
-  })
+    fetchUpdatedContent(updateSiteId)
+    })
    .catch(err => console.log(err))
    setShowWebsiteModal(false)
     }
@@ -169,7 +167,7 @@ const closePublishForEntry = () => {
                             </button>
                           )}
 
-                          {(Site === undefined || Site === '') && (
+                          {(Site === undefined || Site === '' || Site==="--") && (
                             <button
                               className="btn btn-success"
                               onClick={() => handleSite(Email, _id)}

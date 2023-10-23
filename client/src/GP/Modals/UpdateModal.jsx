@@ -54,8 +54,8 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
       .then((result) =>{
         const Mailbox = result.data.map((entry) => entry.MailBox);
         const websites = result.data.map((entry) => entry.Website);
-        setSite([" ", ...websites]);
-        setMailbox([" ", ...Mailbox]);
+        setSite(["--", ...websites]);
+        setMailbox(["--", ...Mailbox]);
       })
       .catch(err => {
         console.log(err)
@@ -92,7 +92,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Mailboxes'
                 type='text'
                 placeholder='Enter Mailbox'
-                value={formData.Mailboxes || ""}
+                value={formData.Mailboxes}
                 onChange={(e) => handleChange('Mailboxes', e.target.value)}
                 options={Mailbox}
               />
@@ -101,7 +101,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Docs URL'
                 type='text'
                 placeholder='Enter Docs URL'
-                value={formData.DocsURL || ""}
+                value={formData.DocsURL}
                 onChange={(e) => handleChange('DocsURL', e.target.value)}
               />
 
@@ -109,7 +109,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Title'
                 type='text'
                 placeholder='Enter Title'
-                value={formData.Title || ""}
+                value={formData.Title}
                 onChange={(e) => handleChange('Title', e.target.value)}
               />
 
@@ -117,7 +117,7 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Email ID'
                 type='email'
                 placeholder='Enter Email'
-                value={formData.Email || ""}
+                value={formData.Email}
                 onChange={(e) => handleChange('Email', e.target.value)}
               />
 
@@ -125,14 +125,14 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Status'
                 type='text'
                 placeholder='Enter Status'
-                value={formData.Status || ""}
+                value={formData.Status}
                 onChange={(e) => handleChange('Status', e.target.value)}
-                options={[" ", "sent", "pending", "Link Added"]}
+                options={["--", "sent", "pending", "Link Added"]}
               />
 
               <InputField
                 label='Site'
-                value={formData.Site || ""}
+                value={formData.Site}
                 onChange={(e) => handleChange('Site', e.target.value)}
                 options={site}
               />
@@ -141,15 +141,15 @@ function Update({ show, handleClose, id, handleUpdateSuccess }) {
                 label='Requirements'
                 type='text'
                 placeholder='Enter Requirements'
-                value={formData.Requirements || ""}
+                value={formData.Requirements}
                 onChange={(e) => handleChange('Requirements', e.target.value)}
               />
 
               <InputField
                 label='DF'
-                value={formData.DF || ""}
+                value={formData.DF}
                 onChange={(e) => handleChange('DF', e.target.value)}
-                options={[" ","yes", "no"]}
+                options={[,"yes", "no"]}
               />
             </form>
           </div>

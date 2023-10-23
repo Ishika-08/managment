@@ -286,6 +286,7 @@ const handleCheckboxChange = (event, contentId, status, site) => {
                   handleCheckboxChange={handleCheckboxChange}
                   selectedIds={selectedIds}
                   handleChange = {handleChange}
+                  fetchUpdatedContent={fetchUpdatedContent}
                 />
 
               </div>
