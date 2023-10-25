@@ -20,6 +20,9 @@ const Home = ()=>{
       <div className="container d-flex justify-content-center align-items-center vh-100">
             <div className="row justify-content-center">
                 <tr>
+                <Link to="/Download" className="w-100 btn btn-info btn-lg mb-4">Download Data</Link>
+                </tr>
+                <tr>
                 <Link to="/pitch" className="w-100 btn btn-primary btn-lg mb-4">Pitching</Link>
                 </tr>
                 <tr>

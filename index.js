@@ -14,6 +14,7 @@ const LinkRouter = require('./routes/CheckOldLinks/LinkRouter');
 const checkHrefRouter = require('./routes/CheckOldLinks/CheckHrefRouter');
 const adminRouter = require('./routes/Admin/adminRoutes');
 const SignUpRouter = require('./routes/SignUp/UserSignUpRoute');
+const DownloadDataRoter = require("./routes/DownloadData/DownloadDataRoute")
 
 
 const ContentsModel = require("./models/Content/Contents")
@@ -74,6 +75,9 @@ app.use('/database', databaseRouter);
 app.use('/website', websiteRouter);
 app.use('/content', contentRouter);
 app.use("/admin", adminRouter)
+
+//for download data
+app.use("/download", DownloadDataRoter)
 
 
 //for Pitch

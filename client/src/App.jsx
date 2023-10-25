@@ -12,6 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "@fortawesome/fontawesome-free/css/all.css";
 import LoginForm from './HomePage/LoginForm'
 import ShowWebsites from './Admin/ShowWebsite'
+import DownloadData from './Download-Data/DownloadData'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element = {<LoginForm setIsAuthenticated={setIsAuthenticated}/>}></Route>
         <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/" />} />
+        <Route path="/Download" element={isAuthenticated ? <DownloadData/> : <Navigate to="/"/>} />
         <Route path="/Admin" element={isAuthenticated ? <Admin /> : <Navigate to="/" />} />
         <Route path="/Pitch" element={isAuthenticated ? <Pitch /> : <Navigate to="/" />}></Route>
         <Route path="/GP" element={isAuthenticated ? <GP/> : <Navigate to="/" />}></Route>
